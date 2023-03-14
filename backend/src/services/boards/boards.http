@@ -1,0 +1,11 @@
+POST http://localhost:3030/boards
+Content-Type: application/json
+
+{"name": "Test 2"}
+
+###
+
+GET  http://localhost:3030/boards
+Content-Type: application/json
+
+###
