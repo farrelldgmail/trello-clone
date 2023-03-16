@@ -32,7 +32,7 @@
         lg="2"
         xl="1"
       >
-        <v-card>
+        <v-card :to="{ path: `/board/${board._id}` }">
           <v-img
             class="white--text bg-white"
             width="auto"
@@ -45,22 +45,23 @@
           </v-img>
           <v-card-actions>
             <v-spacer />
-            <v-btn
-              text
+            <v-img
+              width="20"
+              height="20"
+              cover
+              :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
+            />
+            <v-card-text class="px-1 py-0" left>
+              User - Some time ago
+            </v-card-text>
+            <v-icon
+              left
+              small
               color="red"
-              :loading="board.isRemovePending"
               @click="board.remove()"
             >
-              <v-icon
-                left
-                color="red"
-                aria-hidden="false"
-                icon="mdi-home"
-              />
-              <v-icon left color="red" aria-hidden="false">
-                {{ mdiDelete }}
-              </v-icon>Delete
-            </v-btn>
+              {{ mdiDelete }}
+            </v-icon>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -93,7 +94,7 @@
             <v-spacer />
             <v-btn
               text
-              :disabled="newBoard.name === ''"
+              :disabled="!newBoard.name"
               :loading="newBoard.isCreatePending"
               @click="createBoard"
             >
