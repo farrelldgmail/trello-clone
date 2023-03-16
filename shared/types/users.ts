@@ -1,7 +1,7 @@
 import { Id } from './commons';
 
 export interface BaseModelInterface {
-  _id: Id;
+  _id?: Id;
 }
 
 export interface UserInterface extends BaseModelInterface {
