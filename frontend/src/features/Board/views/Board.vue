@@ -1,18 +1,32 @@
 <template>
-  <div>
-    <div v-if="isBoardGetPending">
-      <v-skeleton-loader type="image" width="400px" height="30px" />
-    </div>
-    <div v-else>
-      <v-text-field
-        v-model="board.name"
-        single-line
-        dense
-        hide-details
-        placeholder="ex: My next trip"
-        @change="board.save()"
-      />
-    </div>
+  <!-- // REM TODO DF centrer -->
+  <div v-if="isBoardGetPending" class="fill-height">
+    <v-progress-circular
+      indeterminate
+      color="primary"
+      :size="70"
+      :width="7"
+    />
+  </div>
+  <div v-else>
+    <v-img
+      :src="board.backgroundUrl"
+      cover
+      class="fill-height"
+    >
+      <div>
+        <div>
+          <v-text-field
+            v-model="board.name"
+            single-line
+            dense
+            hide-details
+            placeholder="Name"
+            @change="board.save()"
+          />
+        </div>
+      </div>
+    </v-img>
   </div>
 </template>
 

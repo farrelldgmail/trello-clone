@@ -1,6 +1,11 @@
 <template>
-  <v-container ma-0>
-    <v-row v-if="isBoardFindPending" dense align="start">
+  <v-container class="ma-0 pa-4" fluid>
+    <v-row
+      v-if="isBoardFindPending"
+      align="start"
+      class="pa-0"
+      dense
+    >
       <v-col
         v-for="i in 3"
         :key="i"
@@ -22,7 +27,7 @@
       </v-col>
     </v-row>
 
-    <v-row v-else dense>
+    <v-row v-else class="pa-0" dense>
       <v-col
         v-for="board in boards"
         :key="board._id"
@@ -35,9 +40,7 @@
         <v-card :to="{ path: `/board/${board._id}` }">
           <v-img
             class="white--text bg-white"
-            width="auto"
-            height="250"
-            :aspect-ratio="1"
+            :height="200"
             :src="board.backgroundUrl"
             cover
           >
@@ -58,7 +61,7 @@
               left
               small
               color="red"
-              @click="board.remove()"
+              @click.prevent="board.remove()"
             >
               {{ mdiDelete }}
             </v-icon>
@@ -72,9 +75,21 @@
         lg="2"
         xl="1"
       >
-        <v-card v-if="addAction === 0">
-          <div><a @click.stop="addBoard">Add a board</a></div>
-        </v-card>
+        <v-hover v-slot="{ hover }" v-if="addAction === 0">
+          <v-card
+            class="px-1 py-0"
+            :color="hover ? '#bbb' : '#ddd'"
+            @click.stop="addBoard"
+          >
+            <div>
+              <!-- caption ma-0 -->
+              <span
+                class="caption ma-0"
+                :class="{ 'text-decoration-underline': hover }"
+              >Add a board...</span>
+            </div>
+          </v-card>
+        </v-hover>
         <v-card v-else v-click-outside="{ handler: () => { addAction = 0 } }">
           <v-card-title class="mx-6 px-0">
             <v-text-field
