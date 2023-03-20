@@ -63,7 +63,7 @@
               color="red"
               @click.prevent="board.remove()"
             >
-              {{ mdiDelete }}
+              {{ mdiDeleteForever }}
             </v-icon>
           </v-card-actions>
         </v-card>
@@ -78,11 +78,10 @@
         <v-hover v-slot="{ hover }" v-if="addAction === 0">
           <v-card
             class="px-1 py-0"
-            :color="hover ? '#bbb' : '#ddd'"
+            :color="hover ? 'grey lighten-1 black--text' : 'grey lighten-2 grey--text'"
             @click.stop="addBoard"
           >
             <div>
-              <!-- caption ma-0 -->
               <span
                 class="caption ma-0"
                 :class="{ 'text-decoration-underline': hover }"
@@ -125,7 +124,9 @@
 <script lang="ts" >
 import { computed, ref, defineComponent } from '@vue/composition-api';
 import { useFind, models } from 'feathers-vuex';
-import { mdiDelete } from '@mdi/js';
+import { mdiDeleteForever } from '@mdi/js';
+// REM TODO DF WTF?
+// import { darken } from 'vuetify/lib/util/colors';
 
 export default defineComponent({
   name: 'Boardlist',
@@ -167,7 +168,7 @@ export default defineComponent({
       requiredName,
       addAction,
       addBoard,
-      mdiDelete
+      mdiDeleteForever
     };
   },
 });

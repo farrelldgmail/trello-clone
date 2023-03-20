@@ -1,12 +1,13 @@
 <template>
   <v-app>
     <v-app-bar
-      color="primary"
       app
       fixed
-      flat
+      dense
       theme="dark"
-      class="px-0"
+      color="blue darken-3"
+      class="px-1"
+      height="56"
     >
       <v-btn
         v-if="$route.name === 'boardDetail'"
@@ -21,8 +22,8 @@
           {{ mdiArrowLeft }}
         </v-icon>
       </v-btn>
-      <v-app-bar-title class="white--text px-4">
-        <div class="font-weight-bold">
+      <v-app-bar-title class="white--text px-3">
+        <div class="font-weight-medium">
           Demo
         </div>
       </v-app-bar-title>
