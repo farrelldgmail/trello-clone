@@ -1,12 +1,13 @@
 <template>
-  <!-- // REM TODO DF centrer -->
   <div v-if="isBoardGetPending" class="fill-height">
-    <v-progress-circular
-      indeterminate
-      color="primary"
-      :size="70"
-      :width="7"
-    />
+    <v-card class="text-center grey d-flex flex-column align-center justify-center" height="100%">
+      <v-progress-circular
+        indeterminate
+        color="primary"
+        :size="70"
+        :width="7"
+      />
+    </v-card>
   </div>
   <div v-else>
     <v-img
@@ -18,10 +19,12 @@
         <div>
           <v-text-field
             v-model="board.name"
-            single-line
-            dense
-            hide-details
             placeholder="Name"
+            :rules="requiredName"
+            dark
+            solo
+            solo-inverted
+            single-line
             @change="board.save()"
           />
         </div>
@@ -54,10 +57,13 @@ export default defineComponent({
       id: props.boardId
     });
 
+    const requiredName = computed(() => [(board.value.name === '' ? 'Cannot be empty' : true)]);
+
     // 4. Return the data, named as you prefer
     return {
       board,
-      isBoardGetPending
+      isBoardGetPending,
+      requiredName
     };
   },
 });
