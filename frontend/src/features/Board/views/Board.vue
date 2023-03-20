@@ -20,7 +20,7 @@
         <v-text-field
           v-model="board.name"
           placeholder="Name"
-          :rules="requiredName"
+          :rules="requiredName(board.name)"
           dark
           solo
           solo-inverted
@@ -47,45 +47,88 @@
           >
             <v-card
               class="px-0 py-0"
+              color="grey lighten-2"
             >
-              <v-container class="pa-2 auto-invert">
+              <v-container class="pa-0">
                 <v-row
-                  justify="space-between"
-                  class="pa-0"
+                  no-gutters
+                  class="flex-nowrap bg-surface-variant"
                 >
-                  <v-col cols="10">
-                    Titre plus long
+                  <v-col
+                    cols="1"
+                    style="min-width: 100px; max-width: 100%;"
+                    class="flex-grow-1 flex-shrink-0"
+                  >
+                    <div class="text-body-2 pa-1">
+                      Titre plus long
+                    </div>
                   </v-col>
-                  <v-col cols="2">
-                    <v-menu
-                      offset-x
-                    >
-                      <template
-                        #activator="{ on, attrs }"
+
+                  <v-col
+                    cols="3"
+                    class="flex-grow-0 flex-shrink-0 text-right"
+                  >
+                    <div>
+                      <v-menu
+                        offset-x
                       >
-                        <v-icon
-                          right
-                          v-bind="
-                            attrs"
-                          v-on="on"
+                        <template
+                          #activator="{ on, attrs }"
                         >
-                          {{ mdiDotsHorizontal }}
-                        </v-icon>
-                      </template>
-                      <v-card>
-                        CARTE QUI POP
-                      </v-card>
-                    </v-menu>
+                          <v-icon
+                            right
+                            v-bind="
+                              attrs"
+                            v-on="on"
+                          >
+                            {{ mdiDotsHorizontal }}
+                          </v-icon>
+                        </template>
+                        <v-card>
+                          <v-container>
+                            <v-row>
+                              <v-col>
+                                <v-img
+                                  width="40"
+                                  height="40"
+                                  contain
+                                  :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
+                                />
+                              </v-col>
+                              <v-col cols="10" class="text-body-2">
+                                <div>Owner</div>
+                                <div class="grey--text">
+                                  a month ago
+                                </div>
+                              </v-col>
+                            </v-row>
+                          </v-container>
+                          <!-- // REM TODO DF Carte qui pop -->
+                          CARTE QUI POP
+                        </v-card>
+                      </v-menu>
+                    </div>
                   </v-col>
                 </v-row>
               </v-container>
+
               <v-container class="pa-0">
-                <v-hover v-slot="{ hover }">
+                <v-card
+                  v-for="n in 3"
+                  :key="n"
+                  class="pa-1 ma-2 text-body-2"
+                  color="grey lighten-3"
+                >
+                  Carte {{ n }}
+                </v-card>
+
+                <v-hover v-slot="{ hover }" v-if="addCardAction !== i">
                   <v-card
+                    flat
                     theme="light"
                     class="px-0 py-0"
                     :color="hover ? 'grey lighten-1 black-text' : 'grey lighten-2 grey--text'"
-                    @click.stop="addCard"
+                    @click.stop="addCard(i)"
                   >
                     <div class="caption px-2 py-1">
                       <span
@@ -94,6 +137,30 @@
                     </div>
                   </v-card>
                 </v-hover>
+                <v-card v-else v-click-outside="{ handler: () => { addCardAction = 0 } }">
+                  <v-card-title class="mx-6 px-0">
+                    <v-text-field
+                      dense
+                      label="Name"
+                    />
+                    <!--
+                      v-model="newCard.name"
+                      :rules="requiredName(newCard.name)"
+                    -->
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-spacer />
+                    <v-btn
+                      text
+                    >
+                      <!-- :disabled="!newCard.name"
+                      :loading="newCard.isCreatePending"
+                      @click="createCard"
+                    >-->
+                      Create
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
               </v-container>
             </v-card>
           </v-col>
@@ -103,10 +170,10 @@
             md="2"
             xl="1"
           >
-            <v-hover v-slot="{ hover }">
+            <v-hover v-slot="{ hover }" v-if="addListAction === 0">
               <v-card
                 class="px-1 py-0"
-                :color="hover ? 'grey' : 'grey lighten-2'"
+                :color="hover ? 'grey' : 'transparent'"
                 @click.stop="addList"
               >
                 <div>
@@ -117,6 +184,30 @@
                 </div>
               </v-card>
             </v-hover>
+            <v-card v-else v-click-outside="{ handler: () => { addListAction = 0 } }">
+              <v-card-title class="mx-6 px-0">
+                <v-text-field
+                  dense
+                  label="Name"
+                />
+                <!--
+                  v-model="newList.name"
+                  :rules="requiredName(newList.name)"
+                -->
+              </v-card-title>
+              <v-card-actions>
+                <v-spacer />
+                <v-btn
+                  text
+                >
+                  <!-- :disabled="!newList.name"
+                  :loading="newList.isCreatePending"
+                  @click="createList"
+                >-->
+                  Create
+                </v-btn>
+              </v-card-actions>
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
@@ -142,6 +233,8 @@ export default defineComponent({
   setup(props, context) {
     // 1. Get a reference to the model class
     const { Board } = models.api;
+    // const { List } = models.api;
+    // const { Card } = models.api;
 
     // Get the patient record
     const { item: board, isPending: isBoardGetPending } = useGet({
@@ -149,13 +242,38 @@ export default defineComponent({
       id: props.boardId
     });
 
-    const requiredName = computed(() => [(board.value.name === '' ? 'Cannot be empty' : true)]);
+    // const newList = ref(new List());
+    // const newCard = ref(new Card());
+
+    // Variables
+    const addCardAction = ref(0);
+    const addListAction = ref(0);
+
+    const addList = () => { addListAction.value = 1; };
+    const addCard = (cardIndex) => { addCardAction.value = cardIndex; };
+
+    // const createList = async () => {
+    //  await newList.value.create();
+    //  newList.value = new List();
+    // };
+
+    // const createCard = async () => {
+    //  await newCard.value.create();
+    //  newCard.value = new Card();
+    // };
+
+    const requiredName = (name) => [(name === '' ? 'Cannot be empty' : true)];
 
     // 4. Return the data, named as you prefer
     return {
       board,
       isBoardGetPending,
       requiredName,
+      addCardAction,
+      addListAction,
+      addCard,
+      addList,
+      // newCard,
       mdiDotsHorizontal
     };
   },
