@@ -35,7 +35,7 @@
         sm="6"
         md="4"
         lg="2"
-        xl="1"
+        xl="2"
       >
         <v-card :to="{ path: `/board/${board._id}` }">
           <v-img
@@ -47,7 +47,6 @@
             <v-card-title>{{ board.name }} </v-card-title>
           </v-img>
           <v-card-actions>
-            <v-spacer />
             <v-img
               width="20"
               height="20"
@@ -57,14 +56,21 @@
             <v-card-text class="px-1 py-0" left>
               User - Some time ago
             </v-card-text>
-            <v-icon
-              left
+            <v-btn
               small
-              color="red"
+              fab
+              text
+              class="error--text pa-0 rounded-circle"
               @click.prevent="board.remove()"
             >
-              {{ mdiDeleteForever }}
-            </v-icon>
+              <v-icon
+                left
+                small
+                color="red"
+              >
+                {{ mdiDeleteForever }}
+              </v-icon>
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
