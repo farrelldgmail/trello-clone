@@ -6,7 +6,6 @@
       dense
       theme="dark"
       color="blue darken-3"
-      class="px-1"
       height="56"
     >
       <v-btn
@@ -22,29 +21,25 @@
           {{ mdiArrowLeft }}
         </v-icon>
       </v-btn>
-      <v-app-bar-title class="white--text px-3">
+      <v-app-bar-title class="px-3 white--text">
         <div class="font-weight-medium">
           Demo
         </div>
       </v-app-bar-title>
-      <!--  v-if user loggé -->
-      <v-menu offset-y>
+      <v-spacer />
+      <!-- // REM TODO DF  v-if user loggé -->
+      <v-menu v-if="true" offset-y>
         <template #activator="{ on, attrs }">
-          <v-btn
-            icon
-            color="primary"
-            absolute
-            right
-            v-bind="attrs"
-            v-on="on"
-          >
+          <v-app-bar-nav-icon>
             <v-img
               width="32"
               height="32"
               contain
+              v-bind="attrs"
               :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
+              v-on="on"
             />
-          </v-btn>
+          </v-app-bar-nav-icon>
         </template>
         <v-list>
           <v-list-item>
@@ -54,12 +49,28 @@
       </v-menu>
       <!-- v-else -->
       <!-- // REM TODO DF -->
-      <!--<v-list>
-        <v-list-item>
-          <v-list-item-title>LOGIN</v-list-item-title>
-          <v-list-item-title>SIGN UP</v-list-item-title>
-        </v-list-item>
-      </v-list>-->
+      <v-container v-else>
+        <v-row>
+          <v-col class="text-right">
+            <v-btn
+              text
+              class="white--text text-subtitle-2 font-weight-medium"
+              height="56"
+              to="/login"
+            >
+              Login
+            </v-btn>
+            <v-btn
+              text
+              class="white--text text-subtitle-2 font-weight-medium"
+              height="56"
+              to="/signup"
+            >
+              Sign up
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-app-bar>
 
     <v-main>
@@ -81,3 +92,6 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+  .height-menu { height: 56px; }
+</style>

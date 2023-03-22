@@ -3,11 +3,10 @@
     <v-row justify="center">
       <v-col
         xs="12"
-        sm="5"
-        md="5"
-        lg="5"
-        xl="5"
-        class="px-7"
+        sm="6"
+        md="6"
+        lg="6"
+        xl="6"
       >
         <v-form>
           <v-icon large>
@@ -31,7 +30,7 @@
             label="Confirm Password"
             type="password"
           />
-          <v-btn class="text-caption" :disabled="true">
+          <v-btn class="text-caption font-weight-bold" :disabled="true">
             Sign up
           </v-btn>
         </v-form>

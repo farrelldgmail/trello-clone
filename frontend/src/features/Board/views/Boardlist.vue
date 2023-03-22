@@ -85,6 +85,7 @@
           <v-card
             class="px-1 py-0"
             :color="hover ? 'grey lighten-1 black--text' : 'grey lighten-2 grey--text'"
+            flat
             @click.stop="addBoard"
           >
             <div>

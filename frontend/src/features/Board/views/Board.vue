@@ -1,14 +1,41 @@
 <template>
-  <div v-if="isBoardGetPending" class="fill-height">
-    <v-card class="text-center grey d-flex flex-column align-center justify-center" height="100%">
-      <v-progress-circular
-        indeterminate
-        color="primary"
-        :size="70"
-        :width="7"
-      />
-    </v-card>
-  </div>
+  <!--  <div v-if="isBoardGetPending" class="fill-height">-->
+  <!--    <v-card class="text-center grey d-flex flex-column align-center justify-center" height="100%">-->
+  <!--      <v-progress-circular-->
+  <!--        indeterminate-->
+  <!--        color="primary"-->
+  <!--        :size="70"-->
+  <!--        :width="7"-->
+  <!--      />-->
+  <!--    </v-card>-->
+  <!--  </div>-->
+  <v-container
+    v-if="isBoardGetPending"
+    class="pa-0 v-100"
+    fluid
+  >
+    <v-row>
+      <v-col cols="12">
+        <v-skeleton-loader type="image" width="100%" height="50px" />
+      </v-col>
+    </v-row>
+    <v-row
+      align="start"
+      class="py-2 px-4 ma-0"
+      dense
+    >
+      <v-col
+        v-for="i in 3"
+        :key="i"
+        xs="12"
+        sm="3"
+        lg="2"
+        xl="2"
+      >
+        <v-skeleton-loader type="card" />
+      </v-col>
+    </v-row>
+  </v-container>
   <v-container
     v-else
     class="pa-0 v-100"
@@ -54,7 +81,10 @@
       >
         <v-card
           class="px-0 py-0 auto-invert"
-          color="grey lighten-2"
+          :style="{
+            backgroundColor: colorPicked,
+            color: colorInverter(colorPicked)
+          }"
         >
           <v-container class="pa-0">
             <v-row
@@ -78,6 +108,7 @@
                 <div>
                   <v-menu
                     offset-x
+                    :close-on-content-click="false"
                   >
                     <template
                       #activator="{ on, attrs }"
@@ -86,6 +117,9 @@
                         right
                         v-bind="
                           attrs"
+                        :style="{
+                          color: colorInverter(colorPicked)
+                        }"
                         v-on="on"
                       >
                         {{ mdiDotsHorizontal }}
@@ -109,37 +143,48 @@
                             </div>
                           </v-list-item-content>
                         </v-list-item>
-                      </v-list>
-                      <v-card>
-                        <v-sheet color="grey lighten-2" class="py-2 px-3">
-                          <v-menu offset-y>
+                        <v-list-item
+                          :style="{
+                            backgroundColor: colorPicked
+                          }"
+                        >
+                          <v-menu offset-y :close-on-content-click="false">
                             <template #activator="{ on, attrs }">
                               <v-btn
                                 text
-                                class="text-caption font-weight-bold  auto-invert px-2"
+                                class="text-caption font-weight-bold auto-invert px-3 py-2"
                                 v-bind="attrs"
+                                :style="{
+                                  backgroundColor: colorPicked,
+                                  color: colorInverter(colorPicked)
+                                }"
                                 v-on="on"
                               >
                                 BACKGROUND COLOR
-                                <v-icon color="black" class="ml-3">
+                                <v-icon :color="colorInverter(colorPicked)" class="ml-3">
                                   {{ mdiFormatColorFill }}
                                   {{ mdiColorHelper }}
                                 </v-icon>
                               </v-btn>
                             </template>
-                            <v-color-picker width="250" canvas-height="125" :mode.sync="mode" />
+                            <v-color-picker
+                              v-model="colorPicked"
+                              width="250"
+                              canvas-height="125"
+                              :mode.sync="mode"
+                            />
                           </v-menu>
-                        </v-sheet>
-                        <v-card-actions class="mt-2">
-                          <v-spacer />
-                          <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2">
-                            <v-icon color="red">
-                              {{ mdiMinusCircle }}
-                            </v-icon>
-                            DELETE CARD
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
+                        </v-list-item>
+                      </v-list>
+                      <v-card-actions class="mt-2">
+                        <v-spacer />
+                        <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2">
+                          <v-icon color="red">
+                            {{ mdiMinusCircle }}
+                          </v-icon>
+                          DELETE CARD
+                        </v-btn>
+                      </v-card-actions>
                     </v-card>
                   </v-menu>
                 </div>
@@ -172,31 +217,24 @@
                 </div>
               </v-card>
             </v-hover>
-            <v-card v-else v-click-outside="{ handler: () => { addCardAction = 0 } }">
-              <v-card-title class="mx-6 px-0">
+            <v-card v-else v-click-outside="{ handler: () => { addCardAction = 0 } }" color="grey lighten-3">
+              <v-card-actions class="mx-0 px-0">
                 <v-text-field
-                  dense
                   solo
-                  label="Name"
-                  append-inner-icon="mdi-content-save"
+                  autofocus
+                  color="black"
+                  :append-icon="mdiContentSave"
                 />
                 <!--
                       v-model="newCard.name"
                       :rules="requiredName(newCard.name)"
                     -->
-                <v-btn
-                  text
-                >
-                  <!-- :disabled="!newCard.name"
+                <!--                >-->
+                <!-- :disabled="!newCard.name"
                       :loading="newCard.isCreatePending"
-                      @click="createCard"
+                      @click.append="createCard"
                     >-->
-                  <v-icon>
-                    {{ mdiContentSave }}
-                  </v-icon>
-                </v-btn>
-              </v-card-title>
-              <v-card-actions />
+              </v-card-actions>
             </v-card>
           </v-container>
         </v-card>
@@ -208,19 +246,15 @@
         xl="2"
       >
         <v-hover v-slot="{ hover }" v-if="addListAction === 0">
-          <v-card
-            class="px-1 py-0"
-            flat
-            color="transparent"
+          <!-- // REM TODO DF Le bouton ici plus large -->
+          <v-btn
+            style="text-transform: unset !important;"
+            class="white--text text-caption pl-1 pr-12 grey darken-2"
+            plain
             @click.stop="addList"
           >
-            <v-sheet
-              class="white--text text-caption pa-2"
-              :color="hover ? 'rgba(91,91,91,1)' : 'rgba(91,91,91,0.7)'"
-            >
-              Add a list...
-            </v-sheet>
-          </v-card>
+            Add a list...
+          </v-btn>
         </v-hover>
         <v-card v-else v-click-outside="{ handler: () => { addListAction = 0 } }">
           <v-card-title class="mx-6 px-0">
@@ -306,6 +340,40 @@ export default defineComponent({
 
     const requiredName = (name) => [(name === '' ? 'Cannot be empty' : true)];
 
+    // REM TODO DF à supprimer
+    const colorPicked = ref('#e0e0e0');
+
+    // const valToHex = (val) => {
+    //   const hex = val.toString(16);
+    //   return hex.length === 1 ? `0${hex}` : hex;
+    // };
+
+    // const rgbToHex = (rgbVal) => `#${valToHex(rgbVal.r)}${valToHex(rgbVal.g)}${valToHex(rgbVal.b)}`;
+
+    const colorInverter = (col) => {
+      const hexVals = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(col);
+
+      // return rgbToHex({
+      //   r: 255 - parseInt(hexVals[1], 16),
+      //   g: 255 - parseInt(hexVals[2], 16),
+      //   b: 255 - parseInt(hexVals[3], 16)
+      // });
+
+      const rgbed = {
+        r: 255 - parseInt(hexVals[1], 16),
+        g: 255 - parseInt(hexVals[2], 16),
+        b: 255 - parseInt(hexVals[3], 16)
+      };
+
+      const hsp = Math.sqrt(
+        0.299 * rgbed.r * rgbed.r
+        + 0.587 * rgbed.g * rgbed.g
+        + 0.114 * rgbed.b * rgbed.b
+      );
+
+      return (hsp > 127.5) ? '#fff' : '#000';
+    };
+
     // 4. Return the data, named as you prefer
     return {
       board,
@@ -323,7 +391,9 @@ export default defineComponent({
       mdiFormatColorFill,
       mdiColorHelper,
       mdiMinusCircle,
-      mdiContentSave
+      mdiContentSave,
+      colorPicked,
+      colorInverter
     };
   },
 });
