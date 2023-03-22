@@ -27,6 +27,7 @@
           Demo
         </div>
       </v-app-bar-title>
+      <!--  v-if user loggé -->
       <v-menu offset-y>
         <template #activator="{ on, attrs }">
           <v-btn
@@ -51,6 +52,14 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <!-- v-else -->
+      <!-- // REM TODO DF -->
+      <!--<v-list>
+        <v-list-item>
+          <v-list-item-title>LOGIN</v-list-item-title>
+          <v-list-item-title>SIGN UP</v-list-item-title>
+        </v-list-item>
+      </v-list>-->
     </v-app-bar>
 
     <v-main>

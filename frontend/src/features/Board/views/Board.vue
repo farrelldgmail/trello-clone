@@ -270,9 +270,6 @@ export default defineComponent({
       required: true
     },
   },
-  data: () => ({
-
-  }),
   setup(props, context) {
     // 1. Get a reference to the model class
     const { Board } = models.api;

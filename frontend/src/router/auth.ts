@@ -5,4 +5,15 @@ export default (lazyLoad) => ([
     name: 'Login',
     component: lazyLoad('features/Auth/views/Login.vue'),
   },
+  {
+    path: '/signup',
+    name: 'Signup',
+    component: lazyLoad('features/Auth/views/Signup.vue'),
+  },
+  // REM TODO DF Logout
+  /* {
+    path: '/logout',
+    name: 'Logout',
+    component: lazyLoad('features/Auth/views/Login.vue'),
+  } */
 ]);

@@ -11,18 +11,28 @@
       >
         <v-form>
           <v-icon large>
-            {{ mdiClipboardAccount }}
+            {{ mdiFaceMan }}
           </v-icon>
           <v-text-field
             label="User"
-            :autofocus="true"
+          />
+          <v-text-field
+            label="Display Name"
+          />
+          <v-text-field
+            label="Email"
+            type="email"
           />
           <v-text-field
             label="Password"
             type="password"
           />
+          <v-text-field
+            label="Confirm Password"
+            type="password"
+          />
           <v-btn class="text-caption" :disabled="true">
-            Login
+            Sign up
           </v-btn>
         </v-form>
       </v-col>
@@ -32,13 +42,13 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { mdiClipboardAccount } from '@mdi/js';
+import { mdiFaceMan } from '@mdi/js';
 
 export default defineComponent({
   name: 'Login',
   setup(props, context) {
     return {
-      mdiClipboardAccount
+      mdiFaceMan
     };
   }
 });
