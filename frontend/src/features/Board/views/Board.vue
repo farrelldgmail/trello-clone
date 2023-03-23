@@ -167,15 +167,17 @@
                                 </v-icon>
                               </v-btn>
                             </template>
+                            <!-- le v-model empêche d'avoir le transparent -->
                             <v-color-picker
                               v-model="colorPicked"
-                              width="250"
+                              width="265"
                               canvas-height="125"
                               :mode.sync="mode"
                             />
                           </v-menu>
                         </v-list-item>
                       </v-list>
+
                       <v-card-actions class="mt-2">
                         <v-spacer />
                         <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2">
@@ -245,17 +247,16 @@
         lg="2"
         xl="2"
       >
-        <v-hover v-slot="{ hover }" v-if="addListAction === 0">
-          <!-- // REM TODO DF Le bouton ici plus large -->
-          <v-btn
-            style="text-transform: unset !important;"
-            class="white--text text-caption pl-1 pr-12 grey darken-2"
-            plain
-            @click.stop="addList"
-          >
-            Add a list...
-          </v-btn>
-        </v-hover>
+        <v-btn
+          v-if="addListAction === 0"
+          style="text-transform: unset !important;"
+          class="white--text text-caption px-1 py-0 opacity-trick force-text-align-left"
+          plain
+          block
+          @click.stop="addList"
+        >
+          Add a list...
+        </v-btn>
         <v-card v-else v-click-outside="{ handler: () => { addListAction = 0 } }">
           <v-card-title class="mx-6 px-0">
             <v-text-field
@@ -400,6 +401,7 @@ export default defineComponent({
 </script>
 <style scoped>
   .v-100 { height: 100%; }
-  .grey-darken-2-opc-70 { background-color: rgba(61,61,61,0.7) }
-  .grey-darken-2-opc-100 { background-color: rgba(61,61,61,0.7) }
+  .opacity-trick { background-color: rgba(81,81,81,0.7) !important; }
+  .opacity-trick:hover { background-color: rgba(81,81,81,1) !important; }
+  .force-text-align-left { justify-content: left !important;}
 </style>
