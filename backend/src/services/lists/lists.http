@@ -1,0 +1,21 @@
+POST http://localhost:3030/lists
+Content-Type: application/json
+
+{
+  "name": "List",
+  "color": "#ff0000",
+  "board":     {
+    "_id": "641c573b269736407faa0f6d",
+    "name": "Test 44",
+    "createdAt": "2023-03-23T13:42:19.338Z",
+    "updatedAt": "2023-03-23T13:42:19.338Z",
+    "__v": 0
+  }
+}
+
+###
+
+GET  http://localhost:3030/lists
+Content-Type: application/json
+
+###

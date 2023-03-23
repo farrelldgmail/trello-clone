@@ -1,4 +1,14 @@
 <template>
+  <!--  <div v-if="isBoardGetPending" class="fill-height">-->
+  <!--    <v-card class="text-center grey d-flex flex-column align-center justify-center" height="100%">-->
+  <!--      <v-progress-circular-->
+  <!--        indeterminate-->
+  <!--        color="primary"-->
+  <!--        :size="70"-->
+  <!--        :width="7"-->
+  <!--      />-->
+  <!--    </v-card>-->
+  <!--  </div>-->
   <v-container
     v-if="isBoardGetPending"
     class="pa-0 v-100"
@@ -390,8 +400,8 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-  .v-100 { height: 100%; }
-  .opacity-trick { background-color: rgba(81,81,81,0.7) !important; }
-  .opacity-trick:hover { background-color: rgba(81,81,81,1) !important; }
-  .force-text-align-left { justify-content: left !important;}
+.v-100 { height: 100%; }
+.opacity-trick { background-color: rgba(81,81,81,0.7) !important; }
+.opacity-trick:hover { background-color: rgba(81,81,81,1) !important; }
+.force-text-align-left { justify-content: left !important;}
 </style>

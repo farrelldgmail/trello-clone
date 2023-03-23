@@ -132,8 +132,6 @@
 import { computed, ref, defineComponent } from '@vue/composition-api';
 import { useFind, models } from 'feathers-vuex';
 import { mdiDeleteForever } from '@mdi/js';
-// REM TODO DF WTF?
-// import { darken } from 'vuetify/lib/util/colors';
 
 export default defineComponent({
   name: 'Boardlist',

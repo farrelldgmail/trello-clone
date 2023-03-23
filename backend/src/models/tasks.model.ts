@@ -1,4 +1,4 @@
-// boards-model.ts - A mongoose model
+// tasks-model.ts - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
@@ -6,13 +6,12 @@ import { Model, Mongoose } from 'mongoose';
 import { Application } from '@/declarations';
 
 export default function (app: Application): Model<any> {
-  const modelName = 'boards';
+  const modelName = 'tasks';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const { Schema } = mongooseClient;
   const schema = new Schema({
-    name: { type: String, required: true, unique: true },
-    backgroundUrl: { type: String, required: false }
-    // postedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    name: { type: String, required: true },
+    listId: { type: Schema.Types.ObjectId, ref: 'List' },
   }, {
     timestamps: true
   });

@@ -1,0 +1,21 @@
+POST http://localhost:3030/tasks
+Content-Type: application/json
+
+{
+  "name": "Task",
+  "list":     {
+    "_id": "641c6e1fab41ce1a19b56a82",
+    "name": "Test 44",
+    "color": "#ff0000",
+    "createdAt": "2023-03-23T15:19:59.999Z",
+    "updatedAt": "2023-03-23T15:19:59.999Z",
+    "__v": 0
+  }
+}
+
+###
+
+GET  http://localhost:3030/tasks
+Content-Type: application/json
+
+###
