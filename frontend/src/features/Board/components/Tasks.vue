@@ -45,7 +45,7 @@
 
 <script lang="ts" >
 import { computed, ref, defineComponent } from '@vue/composition-api';
-import { useGet, models } from 'feathers-vuex';
+import { models, useFind } from 'feathers-vuex';
 import { mdiContentSave } from '@mdi/js';
 
 export default defineComponent({

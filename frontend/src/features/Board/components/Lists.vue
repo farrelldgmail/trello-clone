@@ -126,7 +126,7 @@
             </v-col>
           </v-row>
         </v-container>
-        <Tasks tasks="tasks" />
+        <Tasks :tasks="tasks" />
       </v-card>
     </v-col>
     <v-col
@@ -136,7 +136,7 @@
       xl="2"
     >
       <v-btn
-        v-if="addListAction === 0"
+        v-if="addAction === 0"
         style="text-transform: unset !important;"
         class="white--text text-caption px-1 py-0 opacity-trick force-text-align-left"
         plain
@@ -145,27 +145,23 @@
       >
         Add a list...
       </v-btn>
-      <v-card v-else v-click-outside="{ handler: () => { addListAction = 0 } }">
+      <v-card v-else v-click-outside="{ handler: () => { addAction = 0 } }">
         <v-card-title class="mx-6 px-0">
           <v-text-field
+            v-model="newList.name"
             label="Name"
             :autofocus="true"
+            :rules="requiredName"
           />
-          <!--
-                  v-model="newList.name"
-                  :rules="requiredName(newList.name)"
-                -->
         </v-card-title>
         <v-card-actions>
           <v-spacer />
           <v-btn
             class="text-caption"
-            :disabled="true"
+            :disabled="!newList.name"
+            :loading="newList.isCreatePending"
+            @click="createList"
           >
-            <!-- :disabled="!newList.name"
-                :loading="newList.isCreatePending"
-                @click="createList"
-              >-->
             Create
           </v-btn>
         </v-card-actions>
@@ -176,7 +172,7 @@
 
 <script lang="ts" >
 import { computed, ref, defineComponent } from '@vue/composition-api';
-import { models } from 'feathers-vuex';
+import { models, useFind } from 'feathers-vuex';
 import {
   mdiDotsHorizontal, mdiFormatColorFill, mdiColorHelper, mdiMinusCircle
 } from '@mdi/js';
@@ -192,8 +188,6 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    // REM TODO DF useFind les tasks
-
     // 1. Get a reference to the model class
     const { List } = models.api;
     const { Task } = models.api;
@@ -205,9 +199,19 @@ export default defineComponent({
     const mode = ref('rgba');
     const modes = ['hsla', 'rgba', 'hexa'];
 
+    // REM TODO DF Comment avoir juste le bon list id alors qu'on a plusieurs lists Ajouter query
+    // Get the tasks
+    const tasksData = useFind({
+      model: Task,
+      params: {
+        query: { }
+      }
+    });
+
     const addList = () => { addAction.value = 1; };
 
     const createList = async () => {
+      // REM TODO DF On passe ici mais la liste n'est pas créée!?!
       await newList.value.create();
       newList.value = new List();
     };
@@ -231,9 +235,6 @@ export default defineComponent({
       return (hsp > 127.5) ? '#fff' : '#000';
     };
 
-    // REM TODO DF Get tasks
-    const tasks = [];
-
     // 4. Return the data, named as you prefer
     return {
       mode,
@@ -248,7 +249,7 @@ export default defineComponent({
       mdiColorHelper,
       mdiMinusCircle,
       colorInverter,
-      tasks
+      tasks: tasksData.items
     };
   },
 });

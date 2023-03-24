@@ -7,7 +7,7 @@ import { ListInterface } from '@/shared/types/lists';
 import hooks from './service.hooks';
 
 const modelName = 'List';
-const servicePath = 'List';
+const servicePath = 'lists';
 
 export class List extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.

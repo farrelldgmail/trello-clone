@@ -7,7 +7,7 @@ import { TaskInterface } from '@/shared/types/tasks';
 import hooks from './service.hooks';
 
 const modelName = 'Task';
-const servicePath = 'Task';
+const servicePath = 'tasks';
 
 export class Task extends BaseModel {
   // Required for $FeathersVuex plugin to work after production transpile.

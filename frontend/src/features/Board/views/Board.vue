@@ -50,10 +50,7 @@
         />
       </v-col>
     </v-row>
-
-    <!-- List component START -->
-    <Lists lists="lists" />
-    <!-- List component END -->
+    <Lists :lists="lists" />
   </v-container>
 </template>
 
@@ -74,10 +71,7 @@ export default defineComponent({
   setup(props, context) {
     // 1. Get a reference to the model class
     const { Board } = models.api;
-    console.log(models.api);
     const { List } = models.api;
-    console.log(List);
-    console.log(Board);
 
     // Get the board
     const { item: board, isPending: isBoardGetPending } = useGet({
@@ -85,24 +79,22 @@ export default defineComponent({
       id: props.boardId
     });
 
-    /* */
-    // const listsParams = computed(() => ({
-    //   query: {}
-    // }));
-    // const listsData = useFind({ model: List, params: listsParams });
-    /* */
+    // Get the lists
+    const listsData = useFind({
+      model: List,
+      params: {
+        query: { boardId: props.boardId }
+      }
+    });
 
     const requiredName = computed(() => [(board.value.name === '' ? 'Cannot be empty' : true)]);
-
-    // REM TDOO DF Get tasks
-    // lists =
 
     // 4. Return the data, named as you prefer
     return {
       board,
       isBoardGetPending,
       requiredName,
-      // lists: listsData.items
+      lists: listsData.items
     };
   },
 });
