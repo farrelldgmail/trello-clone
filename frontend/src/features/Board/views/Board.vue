@@ -127,15 +127,14 @@ export default defineComponent({
     const { List } = models.api;
 
     // Variables
-    const newList = ref(new List());
+    const newList = ref(new List({ boardId: props.boardId, color: '#e0e0e0' }));
     const addListAction = ref(0);
 
     // Data manipulation functions
     const addList = () => { addListAction.value = 1; };
     const createList = async () => {
-      // REM TODO DF La liste est créée, mais ça ne se refresh pas!! Doit-elle être addée à l'array?
       await newList.value.create();
-      newList.value = new List();
+      newList.value = new List({ boardId: props.boardId, color: '#e0e0e0' });
     };
 
     // Data retrieval
@@ -145,10 +144,8 @@ export default defineComponent({
       id: props.boardId
     });
     // Get the lists
-    // Début guerre
     const listsParams = computed(() => ({
-      /* query: { boardId: props.boardId } */ // REM TODO DF Remettre critère
-      query: { }
+      query: { boardId: props.boardId }
     }));
     const { items: fLists } = useFind({
       model: List,
@@ -156,12 +153,6 @@ export default defineComponent({
     });
 
     console.log(fLists);
-    const aa = useFind({
-      model: List,
-      params: listsParams
-    });
-    console.log(aa.items);
-    // Fin guerre
 
     // Validation functions
     const requiredListName = computed(() => [(newList.value.name === '' ? 'Cannot be empty' : true)]);

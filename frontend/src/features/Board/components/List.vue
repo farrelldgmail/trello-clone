@@ -23,7 +23,7 @@
             class="flex-grow-1 flex-shrink-0"
           >
             <div class="text-body-2 pa-1">
-              Titre plus long
+              {{ fList.name }}
             </div>
           </v-col>
 
@@ -99,6 +99,7 @@
                           width="265"
                           canvas-height="125"
                           :mode.sync="mode"
+                          @input="fList.update()"
                         />
                       </v-menu>
                     </v-list-item>
@@ -150,10 +151,11 @@
               color="black"
               :append-icon="mdiContentSave"
               :rules="requiredTaskName"
-              :disabled="!newTask.name"
               :loading="newTask.isCreatePending"
               @click="createTask"
+              @keyup.enter="createTask"
             />
+            <!-- :disabled="!newTask.name" -->
           </v-card-actions>
         </v-card>
       </v-container>
@@ -186,14 +188,16 @@ export default defineComponent({
     // Variables
     const mode = ref('rgba');
     const modes = ['hsla', 'rgba', 'hexa'];
-    const newTask = ref(new Task());
+    // eslint-disable-next-line no-underscore-dangle
+    const newTask = ref(new Task({ listId: props.fList._id }));
     const addTaskAction = ref(0);
 
     // Data manipulation functions
     const addTask = () => { addTaskAction.value = 1; };
     const createTask = async () => {
       await newTask.value.create();
-      newTask.value = new Task();
+      // eslint-disable-next-line no-underscore-dangle
+      newTask.value = new Task({ listId: props.fList._id });
     };
 
     // UI manipulation functions
@@ -216,14 +220,15 @@ export default defineComponent({
     };
 
     // REM TODO DF Ne pas oublier de sauvegarder la couleur?
-    // REM TODO DF Comment avoir juste le bon list id alors qu'on a plusieurs lists Ajouter query
     // Data retrieval
     // Get the tasks
+    const listsParams = computed(() => ({
+      // eslint-disable-next-line no-underscore-dangle
+      query: { listId: props.fList._id }
+    }));
     const { items: fTasks } = useFind({
       model: Task,
-      params: {
-        query: { }
-      }
+      params: listsParams
     });
 
     // Validation functions
