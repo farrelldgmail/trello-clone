@@ -122,7 +122,7 @@ export default defineComponent({
     },
   },
   setup(props, context) {
-    // Reference to models
+    // References to models
     const { Board } = models.api;
     const { List } = models.api;
 
@@ -151,8 +151,6 @@ export default defineComponent({
       model: List,
       params: listsParams
     });
-
-    console.log(fLists);
 
     // Validation functions
     const requiredListName = computed(() => [(newList.value.name === '' ? 'Cannot be empty' : true)]);

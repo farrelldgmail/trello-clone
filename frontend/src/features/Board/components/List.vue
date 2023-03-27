@@ -219,7 +219,6 @@ export default defineComponent({
       return (hsp > 127.5) ? '#fff' : '#000';
     };
 
-    // REM TODO DF Ne pas oublier de sauvegarder la couleur?
     // Data retrieval
     // Get the tasks
     const listsParams = computed(() => ({

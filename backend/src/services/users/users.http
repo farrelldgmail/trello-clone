@@ -3,8 +3,8 @@ POST http://localhost:3030/users
 Content-Type: application/json
 
 {
-  "email": "your_email",
-  "password": "your_password"
+  "email": "farrelld@gmail.com",
+  "password": "DesPatates"
 }
 
 ### Login
@@ -12,7 +12,7 @@ POST http://localhost:3030/authentication
 Content-Type: application/json
 
 {
-  "email": "your_email",
-  "password": "your_password",
+  "email": "farrelld@gmail.com",
+  "password": "DesPatates",
   "strategy": "local"
 }

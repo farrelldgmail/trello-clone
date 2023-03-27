@@ -132,7 +132,6 @@
 import { computed, ref, defineComponent } from '@vue/composition-api';
 import { useFind, models } from 'feathers-vuex';
 import { mdiDeleteForever } from '@mdi/js';
-import Lists from '../components/Lists.vue';
 
 export default defineComponent({
   name: 'Boardlist',
