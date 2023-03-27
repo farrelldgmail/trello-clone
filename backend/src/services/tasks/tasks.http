@@ -28,3 +28,8 @@ GET  http://localhost:3030/tasks/?listId=6421a66c75d9733bc357943c
 Content-Type: application/json
 
 ###
+
+GET  http://localhost:3030/tasks/
+Content-Type: application/json
+
+###
