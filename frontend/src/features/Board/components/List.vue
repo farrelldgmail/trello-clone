@@ -152,8 +152,8 @@
               :append-icon="mdiContentSave"
               :rules="requiredTaskName"
               :loading="newTask.isCreatePending"
-              @click="createTask"
               @keyup.enter="createTask"
+              @click:append="createTask"
             />
             <!-- :disabled="!newTask.name" -->
           </v-card-actions>
