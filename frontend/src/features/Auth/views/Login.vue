@@ -1,40 +1,42 @@
 <template>
-  <v-container class="fill-height text-center">
-    <v-row justify="center">
-      <v-col
-        xs="12"
-        sm="6"
-        md="6"
-        lg="6"
-        xl="6"
-      >
-        <v-form>
-          <v-icon large>
-            {{ mdiClipboardAccount }}
-          </v-icon>
-          <v-text-field
-            v-model="newUser.email"
-            label="User"
-            :autofocus="true"
-          />
-          <v-text-field
-            v-model="newUser.password"
-            label="Password"
-            type="password"
-          />
-          <v-btn class="text-caption font-weight-bold" :disabled="newUser.email === '' || newUser.password === ''" @click="validateLogin">
-            Login
-          </v-btn>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div>
+    <v-container class="fill-height text-center">
+      <v-row justify="center">
+        <v-col
+          xs="12"
+          sm="6"
+          md="6"
+          lg="6"
+          xl="6"
+        >
+          <v-form>
+            <v-icon large>
+              {{ mdiClipboardAccount }}
+            </v-icon>
+            <v-text-field
+              v-model="newUser.username"
+              label="User"
+              :autofocus="true"
+            />
+            <v-text-field
+              v-model="newUser.password"
+              label="Password"
+              type="password"
+            />
+            <v-btn class="text-caption font-weight-bold" :disabled="newUser.email === '' || newUser.password === ''" @click="validateLogin">
+              Login
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { computed, defineComponent, ref } from '@vue/composition-api';
 import { mdiClipboardAccount } from '@mdi/js';
-import { models } from 'feathers-vuex';
-// import login from '../../../../public/client.js';
+import { models, useFind } from 'feathers-vuex';
+import io from 'socket.io-client';
 
 export default defineComponent({
   name: 'Login',
@@ -46,31 +48,27 @@ export default defineComponent({
     const newUser = ref(new User());
 
     // Other functions
-    /**/
-    // const socket = io();
-    // const client = feathers();
-    //
-    // client.configure(feathers.socketio(socket));
-    // client.configure(feathers.authentication());
-    // const login = async (credentials) => {
-    //   try {
-    //     // Otherwise log in with the `local` strategy using the credentials we got
-    //     await client.authenticate({
-    //       strategy: 'local',
-    //       credentials
-    //     });
-    //
-    //     // If successful, show the board page
-    //     document.location.href = 'http://localhost:8080/board';
-    //   } catch (error) {
-    //     // On error, stay on login page
-    //     document.location.href = 'http://localhost:8080/login';
-    //   }
-    // };
-    /**/
-    const validateLogin = () => {
-      console.log('ok');
-      // login({ email: newUser.value.email, password: newUser.value.password });
+    const validateLogin = async () => {
+      const socket = io('http://localhost:3030');
+
+      const authResponse = ref(null);
+      const authError = ref(null);
+      await socket.emit(
+        'create',
+        'authentication',
+        {
+          strategy: 'local',
+          username: newUser.value.username,
+          password: newUser.value.password
+        },
+        (authError, authResponse) => {
+          if (authError === null) {
+            console.log('User logged in!');
+            // Go to dashboard
+            window.location.href = 'board';
+          }
+        }
+      );
     };
 
     return {
