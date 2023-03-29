@@ -11,8 +11,8 @@ export default function (app: Application): Model<any> {
   const { Schema } = mongooseClient;
   const schema = new Schema({
     name: { type: String, required: true, unique: true },
-    backgroundUrl: { type: String, required: false }
-    // postedBy: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    backgroundUrl: { type: String, required: false },
+    postedBy: { type: Schema.Types.ObjectId, ref: 'User' }
   }, {
     timestamps: true
   });

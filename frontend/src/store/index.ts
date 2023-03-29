@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import auth from '../features/Auth/service.model';
 import { FeathersVuex } from '@/feathers-client';
 import RootState from './interfaces';
 
@@ -36,6 +37,6 @@ export default new Vuex.Store<RootState>({
     ...modules,
   },
   plugins: [
-    ...models,
+    ...models, auth,
   ],
 });

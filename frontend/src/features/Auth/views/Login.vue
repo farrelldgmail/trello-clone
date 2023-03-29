@@ -23,7 +23,7 @@
               label="Password"
               type="password"
             />
-            <v-btn class="text-caption font-weight-bold" :disabled="newUser.email === '' || newUser.password === ''" @click="validateLogin">
+            <v-btn class="text-caption font-weight-bold" :disabled="newUser.email === '' || newUser.password === ''" @click="login">
               Login
             </v-btn>
           </v-form>
@@ -33,48 +33,45 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
+import { defineComponent, ref } from '@vue/composition-api';
 import { mdiClipboardAccount } from '@mdi/js';
-import { models, useFind } from 'feathers-vuex';
-import io from 'socket.io-client';
+import { models } from 'feathers-vuex';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+
+const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'Login',
+
   setup(props, context) {
     // References to models
     const { User } = models.api;
 
     // Variables
     const newUser = ref(new User());
+    const { authenticate } = useActions(['authenticate']);
+    const router = context.root.$router;
 
     // Other functions
-    const validateLogin = async () => {
-      const socket = io('http://localhost:3030');
-
-      const authResponse = ref(null);
-      const authError = ref(null);
-      await socket.emit(
-        'create',
-        'authentication',
-        {
-          strategy: 'local',
+    const login = async () => {
+      try {
+        await authenticate({
           username: newUser.value.username,
-          password: newUser.value.password
-        },
-        (authError, authResponse) => {
-          if (authError === null) {
-            console.log('User logged in!');
-            // Go to dashboard
-            window.location.href = 'board';
-          }
-        }
-      );
+          password: newUser.value.password,
+          strategy: 'local'
+        });
+
+        await router.push('/board');
+      } catch (error) {
+        // REM TODO DF Manager error
+        console.log(error.message);
+      }
     };
 
     return {
       mdiClipboardAccount,
       newUser,
-      validateLogin
+      login
     };
   }
 });

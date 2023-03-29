@@ -138,10 +138,11 @@ export default defineComponent({
   setup(props, context) {
     // 1. Get a reference to the model class
     const { Board } = models.api;
+    const userId = context.root.$store.state.auth.user._id;
 
     // 2. Create a computed property for the params
     const boardsParams = computed(() => ({
-      query: { }
+      query: { postedBy: userId }
     }));
 
     // 3. Provide the model and params in the options

@@ -27,8 +27,7 @@
         </div>
       </v-app-bar-title>
       <v-spacer />
-      <!-- // REM TODO DF  v-if user loggé -->
-      <v-menu v-if="true" offset-y>
+      <v-menu v-if="$store.state.auth.user !== null" offset-y>
         <template #activator="{ on, attrs }">
           <v-app-bar-nav-icon>
             <v-img
@@ -43,12 +42,12 @@
         </template>
         <v-list>
           <v-list-item>
-            <v-list-item-title>Logout</v-list-item-title>
+            <v-list-item-title class="hover-pointer" @click="logoutRedirect">
+              Logout
+            </v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
-      <!-- v-else -->
-      <!-- // REM TODO DF -->
       <v-container v-else>
         <v-row>
           <v-col class="text-right">
@@ -82,11 +81,23 @@
 <script lang="ts">
 import { defineComponent, ref } from '@vue/composition-api';
 import { mdiArrowLeft } from '@mdi/js';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+
+const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'App',
   setup(props, context) {
+    const { logout } = useActions(['logout']);
+    const router = context.root.$router;
+
+    const logoutRedirect = async () => {
+      await logout();
+      await router.push('/');
+    };
+
     return {
+      logoutRedirect,
       mdiArrowLeft
     };
   },
@@ -94,4 +105,5 @@ export default defineComponent({
 </script>
 <style scoped>
   .height-menu { height: 56px; }
+  .hover-pointer:hover { cursor: pointer; }
 </style>

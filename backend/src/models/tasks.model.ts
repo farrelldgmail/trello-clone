@@ -12,6 +12,7 @@ export default function (app: Application): Model<any> {
   const schema = new Schema({
     name: { type: String, required: true },
     listId: { type: Schema.Types.ObjectId, ref: 'List' },
+    postedBy: { type: Schema.Types.ObjectId, ref: 'User' }
   }, {
     timestamps: true
   });

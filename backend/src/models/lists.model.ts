@@ -13,6 +13,7 @@ export default function (app: Application): Model<any> {
     name: { type: String, required: true },
     color: { type: String, required: false },
     boardId: { type: Schema.Types.ObjectId, ref: 'Board' },
+    postedBy: { type: Schema.Types.ObjectId, ref: 'User' }
   }, {
     timestamps: true
   });

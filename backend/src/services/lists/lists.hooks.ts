@@ -1,11 +1,15 @@
+const addPostedBy = (context:any) => {
+  context.data.postedBy = context.params.user._id;
+};
+
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [addPostedBy],
+    update: [addPostedBy],
+    patch: [addPostedBy],
     remove: []
   },
 

@@ -17,7 +17,7 @@ const login = async (user, pass) => {
   } catch (error) {
     const newAuth = await client.authenticate({
       strategy: 'local',
-      email: user,
+      username: user,
       password: pass
     });
     console.log(newAuth);
@@ -35,7 +35,7 @@ const logout = async () => {
 
 const callLogin = async () => {
   try {
-    await login(document.getElementById('email').value, document.getElementById('password').value);
+    await login(document.getElementById('username').value, document.getElementById('password').value);
     document.getElementById('btnLogout').style = 'display:block;';
     document.getElementById('btnLogin').style = 'display:none;';
   } catch (error) {
