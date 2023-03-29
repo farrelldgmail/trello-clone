@@ -198,6 +198,7 @@ export default defineComponent({
       await newTask.value.create();
       // eslint-disable-next-line no-underscore-dangle
       newTask.value = new Task({ listId: props.fList._id });
+      addTaskAction.value = 0;
     };
 
     // UI manipulation functions

@@ -136,6 +136,7 @@ export default defineComponent({
     const createList = async () => {
       await newList.value.create();
       newList.value = new List({ boardId: props.boardId, color: '#e0e0e0' });
+      addListAction.value = 0;
     };
 
     // Data retrieval

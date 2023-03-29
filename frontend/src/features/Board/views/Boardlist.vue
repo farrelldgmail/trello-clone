@@ -160,6 +160,7 @@ export default defineComponent({
     const createBoard = async () => {
       await newBoard.value.create();
       newBoard.value = new Board();
+      addAction.value = 0;
     };
 
     const requiredName = computed(() => [(newBoard.value.name === '' ? 'Name is required' : true)]);
