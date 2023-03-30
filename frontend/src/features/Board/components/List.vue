@@ -107,11 +107,11 @@
 
                   <v-card-actions class="mt-2">
                     <v-spacer />
-                    <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2">
+                    <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2" @click="fList.remove()">
                       <v-icon color="red">
                         {{ mdiMinusCircle }}
                       </v-icon>
-                      DELETE CARD
+                      DELETE LIST
                     </v-btn>
                   </v-card-actions>
                 </v-card>

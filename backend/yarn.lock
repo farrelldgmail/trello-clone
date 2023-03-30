@@ -800,6 +800,13 @@
   dependencies:
     debug "^4.3.3"
 
+"@feathersjs/errors@^4.5.2":
+  version "4.5.16"
+  resolved "https://registry.yarnpkg.com/@feathersjs/errors/-/errors-4.5.16.tgz#f79878c3dff6c5c2a21364559a7ad4a406bb51b1"
+  integrity sha512-gurzlqdffsLIrzOcaS0CgNi1ND4hy4BTNGSmz/5IupkoH9Kbbvs3PXqFn/e4nNIYI750YNenuwrYcPtRTZozGw==
+  dependencies:
+    debug "^4.3.3"
+
 "@feathersjs/express@^4.5.15":
   version "4.5.15"
   resolved "https://registry.yarnpkg.com/@feathersjs/express/-/express-4.5.15.tgz#dfc1d0afe52278c862544d133d23a37504512abe"
@@ -2141,6 +2148,15 @@ fastq@^1.6.0:
   dependencies:
     reusify "^1.0.4"
 
+feathers-authentication-hooks@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/feathers-authentication-hooks/-/feathers-authentication-hooks-1.0.2.tgz#ca6b34746c089f234ee4ff28941798ce79bda50d"
+  integrity sha512-qQVvSfdf5xdSBF105Q81CnS9uyYjPTF6bqdSsbc/ryi9VNsK3X7UIBdUbEpV9YxQ1reIdI7Hj9RzBKwzUhQujg==
+  dependencies:
+    "@feathersjs/errors" "^4.5.2"
+    debug "^4.1.1"
+    lodash "^4.17.15"
+
 feathers-mongoose@^8.5.1:
   version "8.5.1"
   resolved "https://registry.yarnpkg.com/feathers-mongoose/-/feathers-mongoose-8.5.1.tgz#ddd94dbdf0a9393cc28482341fc5e57eaf8b6675"
@@ -2753,7 +2769,7 @@ lodash.once@^4.0.0:
   resolved "https://registry.yarnpkg.com/lodash.once/-/lodash.once-4.1.1.tgz#0dd3971213c7c56df880977d504c88fb471a97ac"
   integrity sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==
 
-lodash@^4.17.21:
+lodash@^4.17.15, lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
