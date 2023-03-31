@@ -6,5 +6,7 @@ export interface BaseModelInterface {
 
 export interface BoardInterface extends BaseModelInterface {
   name: string;
+  owner?: object;
+  postedBy?: Id;
   backgroundUrl: string;
 }

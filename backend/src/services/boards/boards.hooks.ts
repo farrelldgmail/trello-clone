@@ -1,3 +1,27 @@
+import { fastJoin, ResolverMap } from 'feathers-hooks-common';
+import { HookContext } from '@feathersjs/feathers';
+import { BoardInterface } from '@/shared/types/boards';
+
+const ownerResolver: ResolverMap<any> = {
+  joins: {
+    owner: () => async (board: BoardInterface, context:HookContext) => {
+      // eslint-disable-next-line no-param-reassign
+      board.owner = (await context.app.services.users.get(board.postedBy, {
+        query: { $select: ['displayname', 'email'] }
+      }));
+      return board;
+    }
+  }
+};
+
+const query = {
+  owner: true,
+};
+
+const addUserInfo = (context:any) => {
+  console.log('addUserInfo');
+};
+
 const wait = (context:any) => new Promise<any>((resolve) => {
   setTimeout(() => { resolve(context); }, 500); // REM TODO DF 3000
 });
@@ -21,8 +45,8 @@ const limitToCurrentUser = (context:any) => {
 export default {
   before: {
     all: [wait],
-    find: [limitToCurrentUser],
-    get: [limitToCurrentUser],
+    find: [limitToCurrentUser, addUserInfo],
+    get: [limitToCurrentUser, addUserInfo],
     create: [addPostedBy],
     update: [addPostedBy],
     patch: [addPostedBy],
@@ -33,9 +57,10 @@ export default {
   },
 
   after: {
-    all: [],
-    find: [limitToCurrentUser],
-    get: [limitToCurrentUser],
+    all: [fastJoin(ownerResolver, query)],
+    // all: [],
+    find: [],
+    get: [],
     create: [],
     update: [],
     patch: [],

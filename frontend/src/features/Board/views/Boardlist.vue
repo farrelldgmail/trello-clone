@@ -53,8 +53,9 @@
               cover
               :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
             />
+            <!-- // REM TODO DF -->
             <v-card-text class="px-1 py-0" left>
-              User - {{ timeAgo(board.updatedAt) }}
+              {{ board.owner.displayname }} - {{ timeAgo(board.updatedAt) }}
             </v-card-text>
             <v-btn
               small
@@ -79,7 +80,7 @@
         sm="6"
         md="4"
         lg="2"
-        xl="1"
+        xl="2"
       >
         <v-hover v-slot="{ hover }" v-if="addAction === 0">
           <v-card
@@ -165,7 +166,6 @@ export default defineComponent({
       addAction.value = 0;
     };
 
-    // REM TODO DF Needs to be computed
     const timeAgo = (date) => {
       const rightNow = new Date();
       const dateUpdated = new Date(date);
