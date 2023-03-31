@@ -55,7 +55,7 @@
             />
             <!-- // REM TODO DF -->
             <v-card-text class="px-1 py-0" left>
-              {{ board.owner.displayname }} - {{ timeAgo(board.updatedAt) }}
+              {{ displayOwner(board.owner.displayname) }} - {{ timeAgo(board.updatedAt) }}
             </v-card-text>
             <v-btn
               small
@@ -166,6 +166,8 @@ export default defineComponent({
       addAction.value = 0;
     };
 
+    const displayOwner = (displayname) => ((context.root.$store.state.auth.user.displayname === displayname) ? 'You' : displayname);
+
     const timeAgo = (date) => {
       const rightNow = new Date();
       const dateUpdated = new Date(date);
@@ -201,6 +203,7 @@ export default defineComponent({
       newBoard,
       createBoard,
       addBoard,
+      displayOwner,
       timeAgo,
       requiredName,
       addAction,
