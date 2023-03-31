@@ -58,7 +58,9 @@
 import { computed, defineComponent, ref } from '@vue/composition-api';
 import { mdiFaceMan } from '@mdi/js';
 import { models } from 'feathers-vuex';
-import io from 'socket.io-client';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+
+const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'Login',
@@ -69,34 +71,28 @@ export default defineComponent({
     // Variables
     const newUser = ref(new User());
     const pass2 = ref('');
+    const { authenticate } = useActions(['authenticate']);
+    const router = context.root.$router;
 
-    // Other functions
     const login = async () => {
-      const socket = io('http://localhost:3030');
-
-      const authResponse = ref(null);
-      const authError = ref(null);
-      await socket.emit(
-        'create',
-        'authentication',
-        {
-          strategy: 'local',
+      try {
+        await authenticate({
           username: newUser.value.username,
-          password: newUser.value.password
-        },
-        (authError, authResponse) => {
-          if (authError === null) {
-            console.log('User logged in!');
-            // Go to dashboard
-            window.location.href = 'board';
-          }
-        }
-      );
+          password: newUser.value.password,
+          strategy: 'local'
+        });
+
+        await router.push('/board');
+      } catch (error) {
+        // REM TODO DF Manager error
+        console.log(error.message);
+      }
     };
 
     // Data manipulations functions
     const createUser = async () => {
       try {
+        console.log(newUser);
         await newUser.value.create();
         await login();
       } catch (error) {

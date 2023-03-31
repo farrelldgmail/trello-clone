@@ -91,9 +91,9 @@ export default defineComponent({
     const { logout } = useActions(['logout']);
     const router = context.root.$router;
 
-    const logoutRedirect = async () => {
-      await logout();
-      await router.push('/');
+    const logoutRedirect = () => {
+      logout();
+      router.push('/');
     };
 
     return {

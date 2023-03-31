@@ -2,6 +2,9 @@
   <div class="flex-fill fill-height d-flex align-center justify-center backdrop-blur">
     <div class="d-flex flex-column align-center garda-blue--text">
       <h1>Restricted: Authorized Personnel Only</h1>
+      <v-btn to="/login" class="text-caption font-weight-bold">
+        Login
+      </v-btn>
     </div>
   </div>
 </template>

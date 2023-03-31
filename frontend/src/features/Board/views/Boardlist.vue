@@ -54,7 +54,7 @@
               :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
             />
             <v-card-text class="px-1 py-0" left>
-              User - Some time ago
+              User - {{ timeAgo(board.updatedAt) }}
             </v-card-text>
             <v-btn
               small
@@ -165,6 +165,33 @@ export default defineComponent({
       addAction.value = 0;
     };
 
+    // REM TODO DF Needs to be computed
+    const timeAgo = (date) => {
+      const rightNow = new Date();
+      const dateUpdated = new Date(date);
+      const diff = (rightNow.getTime() - dateUpdated.getTime()) / 1000;
+
+      const years = diff / (60 * 60 * 24 * 365);
+      if (years >= 1) return (Math.floor(years) === 1) ? 'A year ago' : 'A few years ago';
+
+      const months = diff / (60 * 60 * 24 * 30);
+      if (months >= 1) return (Math.floor(months) === 1) ? 'A month ago' : 'A few months ago';
+
+      const weeks = diff / (60 * 60 * 24 * 7);
+      if (weeks >= 1) return (Math.floor(weeks) === 1) ? 'A week ago' : 'A few weeks ago';
+
+      const days = diff / (60 * 60 * 24);
+      if (days >= 1) return (Math.floor(days) === 1) ? 'A day ago' : 'A few days ago';
+
+      const hours = diff / (60 * 60);
+      if (hours >= 1) return (Math.floor(hours) === 1) ? 'An hour ago' : 'A few hours ago';
+
+      const minutes = diff / 60;
+      if (minutes >= 1) return (Math.floor(minutes) === 1) ? 'A minute ago' : 'A few minutes ago';
+
+      return 'A few seconds ago';
+    };
+
     const requiredName = computed(() => [(newBoard.value.name === '' ? 'Name is required' : true)]);
 
     // 4. Return the data, named as you prefer
@@ -173,9 +200,10 @@ export default defineComponent({
       isBoardFindPending,
       newBoard,
       createBoard,
+      addBoard,
+      timeAgo,
       requiredName,
       addAction,
-      addBoard,
       mdiDeleteForever
     };
   },

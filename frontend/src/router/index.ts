@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
+import { authenticate } from '@feathersjs/authentication';
+import Store from '../store';
 import Home from './home';
 import Auth from './auth';
 import Board from './board';
@@ -21,14 +23,14 @@ export const routes = [
   ...Auth(lazyLoad),
   ...Board(lazyLoad),
   {
-    path: '/unauthenticated',
-    name: 'Unauthenticated',
-    component: lazyLoad('features/Error/views/Unauthenticated.vue'),
-  },
-  {
     path: '/404',
     name: 'NotFound',
     component: lazyLoad('features/Error/views/NotFound.vue'),
+  },
+  {
+    path: '/401',
+    name: 'Unauthenticated',
+    component: lazyLoad('features/Error/views/Unauthenticated.vue'),
   },
 ] as RouteConfig[];
 
@@ -45,6 +47,17 @@ router.beforeEach(async (to, from, next) => {
     next('/404');
     return;
   }
+
+  if (!['/home', '/signup', '/login', '/404', '/401'].includes(to.path)) {
+    try {
+      await Store.dispatch('auth/authenticate');
+    } catch (error) {
+      console.log('401!!');
+      next('/401');
+      return;
+    }
+  }
+
   next();
 });
 
