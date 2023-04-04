@@ -10,10 +10,12 @@ export default function (app: Application): Model<UserInterface> {
   const modelName = 'users';
   const mongooseClient: Mongoose = app.get('mongooseClient');
   const schema = new mongooseClient.Schema({
-    username: { type: String, unique: true },
-    displayname: { type: String, unique: true },
-    email: { type: String, unique: true, lowercase: true },
-    password: { type: String },
+    username: { type: String, unique: true, required: true },
+    displayname: { type: String, required: true },
+    email: {
+      type: String, lowercase: true, unique: true, required: true
+    },
+    password: { type: String, required: true },
   }, {
     timestamps: true
   });

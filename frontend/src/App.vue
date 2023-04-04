@@ -27,7 +27,7 @@
         </div>
       </v-app-bar-title>
       <v-spacer />
-      <v-menu v-if="$store.state.auth.user !== null" offset-y>
+      <v-menu v-if="isAuthenticated" offset-y>
         <template #activator="{ on, attrs }">
           <v-app-bar-nav-icon>
             <v-img
@@ -74,36 +74,56 @@
 
     <v-main>
       <router-view />
+      <error-message :is-displayed="isError" :err-message="errMessage" @close="closeErrMessage" />
     </v-main>
   </v-app>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { computed, defineComponent, ref } from '@vue/composition-api';
 import { mdiArrowLeft } from '@mdi/js';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
+import errorMessage from '@/features/Error/components/errorMessage.vue';
 
 const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'App',
+  components: { errorMessage },
+  errorCaptured(error) {
+    // Send error in store (error module)
+    this.$store.commit({ type: 'error/SET_ERROR', message: error.message });
+    console.error(error);
+    return false;
+  },
   setup(props, context) {
     const { logout } = useActions(['logout']);
     const router = context.root.$router;
+    const errMessage = ref('');
+    const isError = ref(false);
+
+    const closeErrMessage = () => {
+      isError.value = false;
+    };
 
     const logoutRedirect = () => {
       logout();
       router.push('/');
     };
 
+    const isAuthenticated = computed(() => (context.root.$store.state.auth.user !== null));
+
     return {
+      isError,
+      errMessage,
+      closeErrMessage,
       logoutRedirect,
+      isAuthenticated,
       mdiArrowLeft
     };
   },
 });
 </script>
 <style scoped>
-  .height-menu { height: 56px; }
   .hover-pointer:hover { cursor: pointer; }
 </style>

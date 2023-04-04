@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter, { RouteConfig } from 'vue-router';
 
-import { authenticate } from '@feathersjs/authentication';
 import Store from '../store';
 import Home from './home';
 import Auth from './auth';

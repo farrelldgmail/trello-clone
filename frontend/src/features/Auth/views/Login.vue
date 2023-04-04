@@ -17,13 +17,15 @@
               v-model="newUser.username"
               label="User"
               :autofocus="true"
+              :rules="requiredUsername"
             />
             <v-text-field
               v-model="newUser.password"
               label="Password"
               type="password"
+              :rules="requiredPass"
             />
-            <v-btn class="text-caption font-weight-bold" :disabled="newUser.email === '' || newUser.password === ''" @click="login">
+            <v-btn class="text-caption font-weight-bold" :disabled="!isUserValid" @click="login">
               Login
             </v-btn>
           </v-form>
@@ -33,7 +35,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from '@vue/composition-api';
+import { computed, defineComponent, ref } from '@vue/composition-api';
 import { mdiClipboardAccount } from '@mdi/js';
 import { models } from 'feathers-vuex';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
@@ -42,7 +44,6 @@ const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'Login',
-
   setup(props, context) {
     // References to models
     const { User } = models.api;
@@ -52,25 +53,28 @@ export default defineComponent({
     const { authenticate } = useActions(['authenticate']);
     const router = context.root.$router;
 
+    // Validation functions
+    const isUserValid = computed(() => (newUser.value.email !== '' && newUser.value.password !== ''));
+    const requiredUsername = computed(() => [(newUser.value.username === '' ? 'Cannot be empty' : true)]);
+    const requiredPass = computed(() => [(newUser.value.password === '' ? 'Cannot be empty' : true)]);
+
     // Other functions
     const login = async () => {
-      try {
-        await authenticate({
-          username: newUser.value.username,
-          password: newUser.value.password,
-          strategy: 'local'
-        });
+      await authenticate({
+        username: newUser.value.username,
+        password: newUser.value.password,
+        strategy: 'local'
+      });
 
-        await router.push('/board');
-      } catch (error) {
-        // REM TODO DF Manager error
-        console.log(error.message);
-      }
+      await router.push('/board');
     };
 
     return {
       mdiClipboardAccount,
       newUser,
+      requiredUsername,
+      requiredPass,
+      isUserValid,
       login
     };
   }

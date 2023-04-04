@@ -75,30 +75,19 @@ export default defineComponent({
     const router = context.root.$router;
 
     const login = async () => {
-      try {
-        await authenticate({
-          username: newUser.value.username,
-          password: newUser.value.password,
-          strategy: 'local'
-        });
+      await authenticate({
+        username: newUser.value.username,
+        password: newUser.value.password,
+        strategy: 'local'
+      });
 
-        await router.push('/board');
-      } catch (error) {
-        // REM TODO DF Manager error
-        console.log(error.message);
-      }
+      await router.push('/board');
     };
 
     // Data manipulations functions
     const createUser = async () => {
-      try {
-        console.log(newUser);
-        await newUser.value.create();
-        await login();
-      } catch (error) {
-        // REM TODO DF Faire qqc avec ce message
-        console.log(error.message);
-      }
+      await newUser.value.create();
+      await login();
     };
 
     // Validation functions

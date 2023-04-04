@@ -30,7 +30,7 @@ const feathersClient = feathers()
         )
       ],
     },
-    error: {},
+    error: {}, // REM TODO DF
   });
 
 export default feathersClient;

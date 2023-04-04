@@ -3,10 +3,10 @@ POST http://localhost:3030/users
 Content-Type: application/json
 
 {
-  "username": "a",
-  "displayname": "a",
-  "email": "typedsi@gmail.com",
-  "password": "a"
+  "username": "deafddfa",
+  "displayname": "aad",
+  "email": "patatfdfde@gmail.com",
+  "password": "ea"
 }
 
 ### Login
