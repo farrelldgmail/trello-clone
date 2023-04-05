@@ -1,14 +1,15 @@
 export default {
   namespaced: true,
-  state: () => ({ error: String }),
+  state: () => ({ message: String, name: String }),
   mutations: {
-    SET_ERROR(state, message) {
-      state.error = message;
-    }
+    SET_ERROR(state, payload) {
+      state.message = payload.message.toString();
+      state.name = payload.name.toString();
+    },
   },
   getters: {
     getError(state) {
-      return state.error;
-    }
+      return state;
+    },
   }
 };

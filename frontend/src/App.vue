@@ -92,8 +92,12 @@ export default defineComponent({
   components: { errorMessage },
   errorCaptured(error) {
     // Send error in store (error module)
-    this.$store.commit({ type: 'error/SET_ERROR', message: error.message });
-    console.error(error);
+    console.log('errorCaptured=', error);
+    const { message, name } = error;
+    this.$store.commit({ type: 'error/SET_ERROR', message, name });
+    setTimeout(() => {
+      this.$store.commit({ type: 'error/SET_ERROR', message: '', name: '' });
+    }, 3000);
     return false;
   },
   setup(props, context) {

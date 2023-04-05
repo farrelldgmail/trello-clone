@@ -1,7 +1,7 @@
 <template>
   <transition name="fadeAway">
     <v-card
-      v-if="errMessage !== ''"
+      v-if="error.name"
       outlined
       class="top-right define-widths"
     >
@@ -9,7 +9,7 @@
         Error
       </v-card-title>
       <v-card-text class="pa-2">
-        {{ errMessage }}
+        <div>{{ error.message }}</div>
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -31,12 +31,12 @@ import { computed } from '@vue/composition-api';
 export default {
   name: 'ErrorMessage',
   setup(props, context) {
-    // eslint-disable-next-line max-len
-    const errMessage = computed(() => ((context.root.$store.getters['error/getError'].message) ? context.root.$store.getters['error/getError'].message : ''));
+    const error = computed(() => (context.root.$store.getters['error/getError']));
 
-    // eslint-disable-next-line no-param-reassign
-    const closeError = () => { context.root.$store.commit({ type: 'error/SET_ERROR', message: '' }); };
-    return { errMessage, closeError };
+    const closeError = () => { context.root.$store.commit({ type: 'error/SET_ERROR', message: '', name: '' }); };
+    closeError();
+
+    return { error, closeError };
   }
 };
 </script>
