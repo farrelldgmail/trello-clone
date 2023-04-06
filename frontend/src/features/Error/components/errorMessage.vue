@@ -27,6 +27,9 @@
 
 <script>
 import { computed } from '@vue/composition-api';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
+
+// const { mapActions, mapState } = createNamespacedHelpers('error');
 
 export default {
   name: 'ErrorMessage',
@@ -37,7 +40,12 @@ export default {
     closeError();
 
     return { error, closeError };
-  }
+  },
+  // methods: {
+  //   ...mapActions([
+  //     'setError',
+  //   ]),
+  // }
 };
 </script>
 

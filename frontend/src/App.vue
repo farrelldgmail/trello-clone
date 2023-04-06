@@ -74,7 +74,7 @@
 
     <v-main>
       <router-view />
-      <error-message :is-displayed="isError" :err-message="errMessage" @close="closeErrMessage" />
+      <error-message />
     </v-main>
   </v-app>
 </template>
@@ -85,7 +85,7 @@ import { mdiArrowLeft } from '@mdi/js';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import errorMessage from '@/features/Error/components/errorMessage.vue';
 
-const { useActions } = createNamespacedHelpers('auth');
+const { useActions } = createNamespacedHelpers('auth', 'error');
 
 export default defineComponent({
   name: 'App',
@@ -94,6 +94,7 @@ export default defineComponent({
     // Send error in store (error module)
     console.log('errorCaptured=', error);
     const { message, name } = error;
+    // setError()
     this.$store.commit({ type: 'error/SET_ERROR', message, name });
     setTimeout(() => {
       this.$store.commit({ type: 'error/SET_ERROR', message: '', name: '' });
@@ -103,12 +104,9 @@ export default defineComponent({
   setup(props, context) {
     const { logout } = useActions(['logout']);
     const router = context.root.$router;
-    const errMessage = ref('');
-    const isError = ref(false);
+    const { setError } = useActions(['setError']);
 
-    const closeErrMessage = () => {
-      isError.value = false;
-    };
+    setError();
 
     const logoutRedirect = () => {
       logout();
@@ -118,9 +116,7 @@ export default defineComponent({
     const isAuthenticated = computed(() => (context.root.$store.state.auth.user !== null));
 
     return {
-      isError,
-      errMessage,
-      closeErrMessage,
+      setError,
       logoutRedirect,
       isAuthenticated,
       mdiArrowLeft

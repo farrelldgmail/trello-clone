@@ -11,5 +11,12 @@ export default {
     getError(state) {
       return state;
     },
+  },
+  /**/
+  actions: {
+    setError({ commit, state }, payload) {
+      commit('SET_ERROR', payload);
+    }
   }
+  /**/
 };
