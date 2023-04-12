@@ -15,6 +15,7 @@ export class Task extends BaseModel {
 
   static instanceDefaults(): TaskInterface {
     return {
+      _id: null,
       name: null,
     };
   }

@@ -85,7 +85,9 @@ import { mdiArrowLeft } from '@mdi/js';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import errorMessage from '@/features/Error/components/errorMessage.vue';
 
-const { useActions } = createNamespacedHelpers('auth', 'error');
+const { useActions: useActionAuth } = createNamespacedHelpers('auth');
+const { useActions: useActionError } = createNamespacedHelpers('error');
+// const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'App',
@@ -94,19 +96,25 @@ export default defineComponent({
     // Send error in store (error module)
     console.log('errorCaptured=', error);
     const { message, name } = error;
-    // setError()
-    this.$store.commit({ type: 'error/SET_ERROR', message, name });
+    this.setError({ message: '', name: '' });
     setTimeout(() => {
-      this.$store.commit({ type: 'error/SET_ERROR', message: '', name: '' });
+      this.setError({ message: '', name: '' });
     }, 3000);
     return false;
   },
+  // methods: {
+  //   // REM TODO DF
+  //   setError() {
+  //     console.log('call dispatch');
+  //     this.$store.dispatch('error/setError', { message: 'Message', name: 'Name' });
+  //     console.log('called dispatch');
+  //   }
+  // },
   setup(props, context) {
-    const { logout } = useActions(['logout']);
+    const { logout } = useActionAuth(['logout']);
     const router = context.root.$router;
-    const { setError } = useActions(['setError']);
-
-    setError();
+    const { setError } = useActionError(['setError']);
+    // setError();
 
     const logoutRedirect = () => {
       logout();

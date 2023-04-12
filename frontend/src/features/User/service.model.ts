@@ -15,6 +15,7 @@ export class User extends BaseModel {
 
   static instanceDefaults(): UserInterface {
     return {
+      _id: null,
       email: null,
       password: null,
     };

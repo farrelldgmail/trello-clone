@@ -1,3 +1,5 @@
+import { BoardInterface } from '../../../../shared/types/boards';
+
 export default {
   namespaced: true,
   state: () => ({ message: String, name: String }),
@@ -12,11 +14,10 @@ export default {
       return state;
     },
   },
-  /**/
   actions: {
-    setError({ commit, state }, payload) {
+    async setError({ commit }, payload) {
+      console.log('ERROR SET');
       commit('SET_ERROR', payload);
     }
   }
-  /**/
 };
