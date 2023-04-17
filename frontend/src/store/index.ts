@@ -1,9 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import auth from '../features/Auth/service.model';
 import { FeathersVuex } from '@/feathers-client';
 import RootState from './interfaces';
-import errorModule from '../features/Error/error.module';
 
 const featureName = (str) => {
   const s = str.split('/');
@@ -38,6 +36,6 @@ export default new Vuex.Store<RootState>({
     ...modules
   },
   plugins: [
-    ...models, auth
+    ...models
   ],
 });

@@ -16,7 +16,6 @@ export default {
   },
   actions: {
     async setError({ commit }, payload) {
-      console.log('ERROR SET');
       commit('SET_ERROR', payload);
     }
   }

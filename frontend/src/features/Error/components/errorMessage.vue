@@ -26,27 +26,23 @@
 </template>
 
 <script>
-// REM TODO DF
+// REM TODO DF Mimic app.vue for add action
 import { computed } from '@vue/composition-api';
-// import { createNamespacedHelpers } from 'vuex-composition-helpers';
+import { createNamespacedHelpers } from 'vuex-composition-helpers';
 
-// const { mapActions, mapState } = createNamespacedHelpers('error');
+const { useActions: useActionError } = createNamespacedHelpers('error');
 
 export default {
   name: 'ErrorMessage',
   setup(props, context) {
     const error = computed(() => (context.root.$store.getters['error/getError']));
+    const { setError } = useActionError(['setError']);
 
-    const closeError = () => { context.root.$store.commit({ type: 'error/SET_ERROR', message: '', name: '' }); };
+    const closeError = () => { setError({ message: '', name: '' }); };
     closeError();
 
     return { error, closeError };
   },
-  // methods: {
-  //   ...mapActions([
-  //     'setError',
-  //   ]),
-  // }
 };
 </script>
 

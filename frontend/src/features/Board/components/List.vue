@@ -6,11 +6,16 @@
     xl="2"
   >
     <v-card
-      class="px-0 py-0 auto-invert"
+      :id="fList._id"
+      class="px-0 py-0 data-list"
       :style="{
         backgroundColor: fList.color,
         color: colorInverter(fList.color)
       }"
+      @dragenter.prevent="dragSwitchEffect(fList._id)"
+      @dragleave.prevent="dragSwitchEffect(fList._id)"
+      @dragover.prevent
+      @drop.prevent="drop($event, fList._id)"
     >
       <v-container class="pa-0">
         <v-row
@@ -93,7 +98,6 @@
                             </v-icon>
                           </v-btn>
                         </template>
-                        <!-- // REM TODO DF le v-model empêche d'avoir le transparent -->
                         <v-color-picker
                           v-model="fList.color"
                           width="265"
@@ -220,6 +224,13 @@ export default defineComponent({
       return (hsp > 127.5) ? '#fff' : '#000';
     };
 
+    const dragSwitchEffect = (cardId) => {
+      const card = document.getElementById(cardId);
+      const { color } = card.style;
+      card.style.color = card.style.backgroundColor;
+      card.style.backgroundColor = color;
+    };
+
     // Data retrieval
     // Get the tasks
     const listsParams = computed(() => ({
@@ -234,6 +245,20 @@ export default defineComponent({
     // Validation functions
     const requiredTaskName = computed(() => [(newTask.value.name === '' ? 'Cannot be empty' : true)]);
 
+    const drop = (event, listId) => {
+      // console.log('DROP');
+      // console.log(listId);
+      // console.log('target=', event.target.id);
+      // console.log(event.dataTransfer.getData('text'));
+
+      // Comment aller updater la task maintenant???!
+
+      // id du task qui a été droppé
+      // event.dataTransfer.getData('text');
+
+      // id de la liste
+      // listId
+    };
     // 4. Return the data, named as you prefer
     return {
       mdiDotsHorizontal,
@@ -248,8 +273,10 @@ export default defineComponent({
       addTask,
       createTask,
       colorInverter,
+      dragSwitchEffect,
       requiredTaskName,
-      fTasks
+      fTasks,
+      drop
     };
   },
 });

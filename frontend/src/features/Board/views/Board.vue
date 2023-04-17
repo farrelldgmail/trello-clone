@@ -168,7 +168,7 @@ export default defineComponent({
       isBoardGetPending,
       fLists,
       requiredListName,
-      requiredBoardName,
+      requiredBoardName
     };
   },
 });

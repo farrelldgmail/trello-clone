@@ -87,16 +87,15 @@ import errorMessage from '@/features/Error/components/errorMessage.vue';
 
 const { useActions: useActionAuth } = createNamespacedHelpers('auth');
 const { useActions: useActionError } = createNamespacedHelpers('error');
-// const { useActions } = createNamespacedHelpers('auth');
 
 export default defineComponent({
   name: 'App',
   components: { errorMessage },
   errorCaptured(error) {
     // Send error in store (error module)
-    console.log('errorCaptured=', error);
+    console.log('Error captured=', error);
     const { message, name } = error;
-    this.setError({ message: '', name: '' });
+    this.setError({ message, name });
     setTimeout(() => {
       this.setError({ message: '', name: '' });
     }, 3000);
@@ -114,7 +113,6 @@ export default defineComponent({
     const { logout } = useActionAuth(['logout']);
     const router = context.root.$router;
     const { setError } = useActionError(['setError']);
-    // setError();
 
     const logoutRedirect = () => {
       logout();
