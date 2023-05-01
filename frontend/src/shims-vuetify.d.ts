@@ -2,7 +2,9 @@
 import 'vuetify/types';
 
 declare module 'vuetify/lib/framework' {
-  import Vuetify from 'vuetify';
+  // import Vuetify from 'vuetify';
+  import { createVuetify } from 'vuetify';
 
-  export default Vuetify;
+  const vuetify = createVuetify();
+  export default vuetify;
 }
