@@ -147,30 +147,22 @@
     </ul>
   </div>
 </template>
-
-<script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-
-export default defineComponent({
-  name: 'HelloWorld',
-
+<script setup>
+import { defineProps } from 'vue';
+// Props
+const props = defineProps({
   props: {
     msg: String,
   },
-
-  setup() {
-    const crash = () => {
-      const t = 0;
-      // This will crash the app!!!
-      // eslint-disable-next-line no-console
-      console.log(...(t as unknown as string[]));
-    };
-
-    return {
-      crash,
-    };
-  },
 });
+
+const crash = () => {
+  const t = 0;
+  // This will crash the app!!!
+  // eslint-disable-next-line no-console
+  // console.log(...(t as unknown as string[]));
+  // REM TODO DF Above line doesn't compile anymore!
+};
 </script>
 
 <style scoped>

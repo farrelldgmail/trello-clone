@@ -53,7 +53,6 @@
               cover
               :src="'https://img.icons8.com/color/1x/circled-user-male-skin-type-7--v1.png'"
             />
-            <!-- // REM TODO DF -->
             <v-card-text class="px-1 py-0" left>
               {{ displayOwner(board.owner.displayname) }} - {{ timeAgo(board.updatedAt) }}
             </v-card-text>
@@ -69,7 +68,7 @@
                 small
                 color="red"
               >
-                {{ mdiDeleteForever }}
+                mdi-delete-forever
               </v-icon>
             </v-btn>
           </v-card-actions>
@@ -128,87 +127,66 @@
     </v-row>
   </v-container>
 </template>
-
-<script lang="ts" >
-import { computed, ref, defineComponent } from '@vue/composition-api';
+<script setup>
+import { computed, ref } from 'vue';
 import { useFind, models } from 'feathers-vuex';
-import { mdiDeleteForever } from '@mdi/js';
+import { useStore } from 'vuex';
 
-export default defineComponent({
-  name: 'Boardlist',
-  setup(props, context) {
-    // 1. Get a reference to the model class
-    const { Board } = models.api;
-    // eslint-disable-next-line no-underscore-dangle
-    const userId = context.root.$store.state.auth.user._id;
+// 1. Get a reference to the model class
+const { Board } = models.api;
+const store = useStore();
 
-    // 2. Create a computed property for the params
-    const boardsParams = computed(() => ({
-      query: { }
-    }));
+// 2. Create a computed property for the params
+const boardsParams = computed(() => ({
+  query: { }
+}));
 
-    // 3. Provide the model and params in the options
-    const { items: boards, isPending: isBoardFindPending } = useFind({ model: Board, params: boardsParams });
+// 3. Provide the model and params in the options
+const { items: boards, isPending: isBoardFindPending } = useFind({ model: Board, params: boardsParams });
 
-    const newBoard = ref(new Board());
+const newBoard = ref(new Board());
 
-    // Variables
-    const addAction = ref(0);
-    const addBoard = () => {
-      // eslint-disable-next-line max-len
-      newBoard.value.backgroundUrl = 'https://images.unsplash.com/photo-1544604860-206456f08229?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80';
-      addAction.value = 1;
-    };
+// Variables
+const addAction = ref(0);
+const addBoard = () => {
+  // eslint-disable-next-line max-len
+  newBoard.value.backgroundUrl = 'https://images.unsplash.com/photo-1544604860-206456f08229?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80';
+  addAction.value = 1;
+};
 
-    const createBoard = async () => {
-      await newBoard.value.create();
-      newBoard.value = new Board();
-      addAction.value = 0;
-    };
+const createBoard = async () => {
+  await newBoard.value.create();
+  newBoard.value = new Board();
+  addAction.value = 0;
+};
 
-    const displayOwner = (displayname) => ((context.root.$store.state.auth.user.displayname === displayname) ? 'You' : displayname);
+const displayOwner = (displayname) => ((store.state.auth.user.displayname === displayname) ? 'You' : displayname);
 
-    const timeAgo = (date) => {
-      const rightNow = new Date();
-      const dateUpdated = new Date(date);
-      const diff = (rightNow.getTime() - dateUpdated.getTime()) / 1000;
+const timeAgo = (date) => {
+  const rightNow = new Date();
+  const dateUpdated = new Date(date);
+  const diff = (rightNow.getTime() - dateUpdated.getTime()) / 1000;
 
-      const years = diff / (60 * 60 * 24 * 365);
-      if (years >= 1) return (Math.floor(years) === 1) ? 'A year ago' : 'A few years ago';
+  const years = diff / (60 * 60 * 24 * 365);
+  if (years >= 1) return (Math.floor(years) === 1) ? 'A year ago' : 'A few years ago';
 
-      const months = diff / (60 * 60 * 24 * 30);
-      if (months >= 1) return (Math.floor(months) === 1) ? 'A month ago' : 'A few months ago';
+  const months = diff / (60 * 60 * 24 * 30);
+  if (months >= 1) return (Math.floor(months) === 1) ? 'A month ago' : 'A few months ago';
 
-      const weeks = diff / (60 * 60 * 24 * 7);
-      if (weeks >= 1) return (Math.floor(weeks) === 1) ? 'A week ago' : 'A few weeks ago';
+  const weeks = diff / (60 * 60 * 24 * 7);
+  if (weeks >= 1) return (Math.floor(weeks) === 1) ? 'A week ago' : 'A few weeks ago';
 
-      const days = diff / (60 * 60 * 24);
-      if (days >= 1) return (Math.floor(days) === 1) ? 'A day ago' : 'A few days ago';
+  const days = diff / (60 * 60 * 24);
+  if (days >= 1) return (Math.floor(days) === 1) ? 'A day ago' : 'A few days ago';
 
-      const hours = diff / (60 * 60);
-      if (hours >= 1) return (Math.floor(hours) === 1) ? 'An hour ago' : 'A few hours ago';
+  const hours = diff / (60 * 60);
+  if (hours >= 1) return (Math.floor(hours) === 1) ? 'An hour ago' : 'A few hours ago';
 
-      const minutes = diff / 60;
-      if (minutes >= 1) return (Math.floor(minutes) === 1) ? 'A minute ago' : 'A few minutes ago';
+  const minutes = diff / 60;
+  if (minutes >= 1) return (Math.floor(minutes) === 1) ? 'A minute ago' : 'A few minutes ago';
 
-      return 'A few seconds ago';
-    };
+  return 'A few seconds ago';
+};
 
-    const requiredName = computed(() => [(newBoard.value.name === '' ? 'Name is required' : true)]);
-
-    // 4. Return the data, named as you prefer
-    return {
-      boards,
-      isBoardFindPending,
-      newBoard,
-      createBoard,
-      addBoard,
-      displayOwner,
-      timeAgo,
-      requiredName,
-      addAction,
-      mdiDeleteForever
-    };
-  },
-});
+const requiredName = computed(() => [(newBoard.value.name === '' ? 'Name is required' : true)]);
 </script>

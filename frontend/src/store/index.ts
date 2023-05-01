@@ -1,5 +1,7 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import { createApp } from 'vue';
+// import Vuex from 'vuex';
+import { createStore } from 'vuex';
+import App from '@/App.vue';
 import { FeathersVuex } from '@/feathers-client';
 import RootState from './interfaces';
 
@@ -20,18 +22,20 @@ const modules = requireModule.keys()
 const requireModel = require.context('../features/', true, /\.model.ts$/);
 const models = requireModel.keys().map((path) => requireModel(path).default);
 
-Vue.use(Vuex);
-Vue.use(FeathersVuex);
+// .use(Vuex)
+createApp(App)
+  .use(FeathersVuex);
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface ApiModels { /* Let each service augment this interface */ }
+
 declare module 'feathers-vuex' {
   interface FeathersVuexGlobalModels {
     api: ApiModels,
   }
 }
 
-export default new Vuex.Store<RootState>({
+export default createStore({
   modules: {
     ...modules
   },

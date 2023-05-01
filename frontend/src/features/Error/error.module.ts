@@ -1,8 +1,5 @@
-import { BoardInterface } from '../../../../shared/types/boards';
-
 export default {
   namespaced: true,
-  state: () => ({ message: String, name: String }),
   mutations: {
     SET_ERROR(state, payload) {
       state.message = payload.message.toString();

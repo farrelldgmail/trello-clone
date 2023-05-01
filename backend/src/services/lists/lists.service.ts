@@ -23,6 +23,12 @@ export default function (app: Application): void {
 
   // Get our initialized service so that we can register hooks
   const service = app.service('lists');
+  // REM TODO DF
+  // const service = app.service('lists').create(Lists, {
+  //   adapter: {
+  //     multi: true
+  //   }
+  // });
 
   service.hooks(hooks);
 }

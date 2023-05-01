@@ -10,7 +10,7 @@
       >
         <v-form>
           <v-icon large>
-            {{ mdiFaceMan }}
+            mdi-face-man
           </v-icon>
           <v-text-field
             v-model="newUser.username"
@@ -53,70 +53,49 @@
     </v-row>
   </v-container>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
-import { mdiFaceMan } from '@mdi/js';
+<script setup>
+import { computed, ref } from 'vue';
 import { models } from 'feathers-vuex';
+import { useRouter } from 'vue-router';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 
+// REM TODO DF Namespace not found
 const { useActions } = createNamespacedHelpers('auth');
 
-export default defineComponent({
-  name: 'Login',
-  setup(props, context) {
-    // References to models
-    const { User } = models.api;
+const { User } = models.api;
 
-    // Variables
-    const newUser = ref(new User());
-    const pass2 = ref('');
-    const { authenticate } = useActions(['authenticate']);
-    const router = context.root.$router;
+// Variables
+const newUser = ref(new User());
+const pass2 = ref('');
+const { authenticate } = useActions(['authenticate']);
+const router = useRouter();
 
-    const login = async () => {
-      await authenticate({
-        username: newUser.value.username,
-        password: newUser.value.password,
-        strategy: 'local'
-      });
+const login = async () => {
+  await authenticate({
+    username: newUser.value.username,
+    password: newUser.value.password,
+    strategy: 'local'
+  });
 
-      await router.push('/board');
-    };
+  await router.push('/board');
+};
 
-    // Data manipulations functions
-    const createUser = async () => {
-      await newUser.value.create();
-      await login();
-    };
+// Data manipulations functions
+const createUser = async () => {
+  await newUser.value.create();
+  await login();
+};
 
-    // Validation functions
-    const passwordsMatch = (pass1, pass2) => pass1 === pass2;
-    // eslint-disable-next-line max-len
-    const validateEmail = (email) => (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(email).toLowerCase()));
-    // eslint-disable-next-line max-len
-    const canCommit = (usr, pass2) => !(!!usr.username && !!usr.displayname && !!usr.password && validateEmail(usr.email) && passwordsMatch(usr.password, pass2));
-    const requiredUsername = computed(() => [(newUser.value.username === '' ? 'Cannot be empty' : true)]);
-    const requiredDisplayname = computed(() => [(newUser.value.displayname === '' ? 'Cannot be empty' : true)]);
-    // eslint-disable-next-line max-len
-    const requiredValidEmail = computed(() => [(newUser.value.email === '' || !validateEmail(newUser.value.email) ? 'Must be a valid email' : true)]);
-    const requiredPass = computed(() => [(newUser.value.password === '' ? 'Cannot be empty' : true)]);
-    const requiredPass2 = computed(() => [(pass2.value === '' ? 'Cannot be empty' : true)]);
-
-    return {
-      newUser,
-      pass2,
-      createUser,
-      passwordsMatch,
-      validateEmail,
-      canCommit,
-      requiredUsername,
-      requiredDisplayname,
-      requiredValidEmail,
-      requiredPass,
-      requiredPass2,
-      mdiFaceMan
-    };
-  }
-});
+// Validation functions
+const passwordsMatch = (pass1, pass2) => pass1 === pass2;
+// eslint-disable-next-line max-len
+const validateEmail = (email) => (/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(String(email).toLowerCase()));
+// eslint-disable-next-line max-len
+const canCommit = (usr, pass2) => !(!!usr.username && !!usr.displayname && !!usr.password && validateEmail(usr.email) && passwordsMatch(usr.password, pass2));
+const requiredUsername = computed(() => [(newUser.value.username === '' ? 'Cannot be empty' : true)]);
+const requiredDisplayname = computed(() => [(newUser.value.displayname === '' ? 'Cannot be empty' : true)]);
+// eslint-disable-next-line max-len
+const requiredValidEmail = computed(() => [(newUser.value.email === '' || !validateEmail(newUser.value.email) ? 'Must be a valid email' : true)]);
+const requiredPass = computed(() => [(newUser.value.password === '' ? 'Cannot be empty' : true)]);
+const requiredPass2 = computed(() => [(pass2.value === '' ? 'Cannot be empty' : true)]);
 </script>

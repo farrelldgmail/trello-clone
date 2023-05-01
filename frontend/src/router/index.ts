@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 import Store from '../store';
 import Home from './home';
 import Auth from './auth';
 import Board from './board';
-
-Vue.use(VueRouter);
 
 function lazyLoad(view) {
   return () => import(/* webpackChunkName: "[request]" */ `@/${view}`);
@@ -22,7 +19,8 @@ export const routes = [
   ...Auth(lazyLoad),
   ...Board(lazyLoad),
   {
-    path: '/404',
+    // path: '/404',
+    path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: lazyLoad('features/Error/views/NotFound.vue'),
   },
@@ -31,21 +29,23 @@ export const routes = [
     name: 'Unauthenticated',
     component: lazyLoad('features/Error/views/Unauthenticated.vue'),
   },
-] as RouteConfig[];
+];
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(),
   routes,
 });
+
+// REM TODO DF Needed ??
+// base: process.env.BASE_URL,
 
 router.beforeEach(async (to, from, next) => {
   // validate URL
   const link = router.resolve(to.path);
-  if (link.resolved?.matched.length === 0) {
-    next('/404');
-    return;
-  }
+  // if (link.resolved?.matched.length === 0) {
+  //   next('/404');
+  //   return;
+  // }
 
   if (!['/home', '/signup', '/login', '/404', '/401'].includes(to.path)) {
     try {

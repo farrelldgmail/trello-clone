@@ -24,26 +24,21 @@
     </v-card>
   </transition>
 </template>
-
-<script>
-// REM TODO DF Mimic app.vue for add action
-import { computed } from '@vue/composition-api';
+<script setup>
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 
+// REM TODO DF Mimic app.vue for add action
 const { useActions: useActionError } = createNamespacedHelpers('error');
 
-export default {
-  name: 'ErrorMessage',
-  setup(props, context) {
-    const error = computed(() => (context.root.$store.getters['error/getError']));
-    const { setError } = useActionError(['setError']);
+const store = useStore();
 
-    const closeError = () => { setError({ message: '', name: '' }); };
-    closeError();
+const error = computed(() => (store.getters['error/getError']));
+const { setError } = useActionError(['setError']);
 
-    return { error, closeError };
-  },
-};
+const closeError = () => { setError({ message: '', name: '' }); };
+closeError();
 </script>
 
 <style scoped>

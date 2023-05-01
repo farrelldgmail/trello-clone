@@ -53,7 +53,7 @@
                     }"
                     v-on="on"
                   >
-                    {{ mdiDotsHorizontal }}
+                    mdi-dots-horizontal
                   </v-icon>
                 </template>
                 <v-card>
@@ -93,8 +93,8 @@
                           >
                             BACKGROUND COLOR
                             <v-icon :color="colorInverter(fList.color)" class="ml-3">
-                              {{ mdiFormatColorFill }}
-                              {{ mdiColorHelper }}
+                              mdi-format-color-fill
+                              mdi-color-helper
                             </v-icon>
                           </v-btn>
                         </template>
@@ -113,7 +113,7 @@
                     <v-spacer />
                     <v-btn text class="text-caption font-weight-bold  auto-invert error--text px-2" @click="fList.remove()">
                       <v-icon color="red">
-                        {{ mdiMinusCircle }}
+                        mdi-minus-circle
                       </v-icon>
                       DELETE LIST
                     </v-btn>
@@ -167,117 +167,87 @@
     </v-card>
   </v-col>
 </template>
+<script setup>
+import { computed, ref, defineProps } from 'vue';
+import { models, useFind, useGet } from 'feathers-vuex';
+import { mdiContentSave } from '@mdi/js';
 
-<script lang="ts" >
-import { computed, ref, defineComponent } from '@vue/composition-api';
-import { models, useFind } from 'feathers-vuex';
-import {
-  mdiDotsHorizontal, mdiFormatColorFill, mdiColorHelper, mdiMinusCircle, mdiContentSave
-} from '@mdi/js';
-import task from './Task.vue';
-
-export default defineComponent({
-  name: 'Lists',
-  components: { task },
-  props: {
-    fList: {
-      type: Object,
-      required: true
-    }
-  },
-  setup(props, context) {
-    // Reference to models
-    const { Task } = models.api;
-
-    // Variables
-    const mode = ref('rgba');
-    const modes = ['hsla', 'rgba', 'hexa'];
-    // eslint-disable-next-line no-underscore-dangle
-    const newTask = ref(new Task({ listId: props.fList._id }));
-    const addTaskAction = ref(0);
-
-    // Data manipulation functions
-    const addTask = () => { addTaskAction.value = 1; };
-    const createTask = async () => {
-      await newTask.value.create();
-      // eslint-disable-next-line no-underscore-dangle
-      newTask.value = new Task({ listId: props.fList._id });
-      addTaskAction.value = 0;
-    };
-
-    // UI manipulation functions
-    const colorInverter = (col) => {
-      const hexVals = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(col);
-
-      const rgbed = {
-        r: 255 - parseInt(hexVals[1], 16),
-        g: 255 - parseInt(hexVals[2], 16),
-        b: 255 - parseInt(hexVals[3], 16)
-      };
-
-      const hsp = Math.sqrt(
-        0.299 * rgbed.r * rgbed.r
-        + 0.587 * rgbed.g * rgbed.g
-        + 0.114 * rgbed.b * rgbed.b
-      );
-
-      return (hsp > 127.5) ? '#fff' : '#000';
-    };
-
-    const dragSwitchEffect = (cardId) => {
-      const card = document.getElementById(cardId);
-      const { color } = card.style;
-      card.style.color = card.style.backgroundColor;
-      card.style.backgroundColor = color;
-    };
-
-    // Data retrieval
-    // Get the tasks
-    const listsParams = computed(() => ({
-      // eslint-disable-next-line no-underscore-dangle
-      query: { listId: props.fList._id }
-    }));
-    const { items: fTasks } = useFind({
-      model: Task,
-      params: listsParams
-    });
-
-    // Validation functions
-    const requiredTaskName = computed(() => [(newTask.value.name === '' ? 'Cannot be empty' : true)]);
-
-    const drop = (event, listId) => {
-      // console.log('DROP');
-      // console.log(listId);
-      // console.log('target=', event.target.id);
-      // console.log(event.dataTransfer.getData('text'));
-
-      // Comment aller updater la task maintenant???!
-
-      // id du task qui a été droppé
-      // event.dataTransfer.getData('text');
-
-      // id de la liste
-      // listId
-    };
-    // 4. Return the data, named as you prefer
-    return {
-      mdiDotsHorizontal,
-      mdiFormatColorFill,
-      mdiColorHelper,
-      mdiMinusCircle,
-      mdiContentSave,
-      mode,
-      modes,
-      newTask,
-      addTaskAction,
-      addTask,
-      createTask,
-      colorInverter,
-      dragSwitchEffect,
-      requiredTaskName,
-      fTasks,
-      drop
-    };
-  },
+// Props
+const props = defineProps({
+  fList: {
+    type: Object,
+    required: true
+  }
 });
+
+// Reference to models
+const { Task } = models.api;
+
+// Variables
+const mode = ref('rgba');
+const modes = ['hsla', 'rgba', 'hexa'];
+// eslint-disable-next-line no-underscore-dangle
+const newTask = ref(new Task({ listId: props.fList._id }));
+const addTaskAction = ref(0);
+
+// Data manipulation functions
+const addTask = () => { addTaskAction.value = 1; };
+const createTask = async () => {
+  await newTask.value.create();
+  // eslint-disable-next-line no-underscore-dangle
+  newTask.value = new Task({ listId: props.fList._id });
+  addTaskAction.value = 0;
+};
+
+// UI manipulation functions
+const colorInverter = (col) => {
+  const hexVals = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(col);
+
+  const rgbed = {
+    r: 255 - parseInt(hexVals[1], 16),
+    g: 255 - parseInt(hexVals[2], 16),
+    b: 255 - parseInt(hexVals[3], 16)
+  };
+
+  const hsp = Math.sqrt(
+    0.299 * rgbed.r * rgbed.r
+    + 0.587 * rgbed.g * rgbed.g
+    + 0.114 * rgbed.b * rgbed.b
+  );
+
+  return (hsp > 127.5) ? '#fff' : '#000';
+};
+
+const dragSwitchEffect = (cardId) => {
+  const card = document.getElementById(cardId);
+  const { color } = card.style;
+  card.style.color = card.style.backgroundColor;
+  card.style.backgroundColor = color;
+};
+
+// Data retrieval
+// Get the tasks
+const listsParams = computed(() => ({
+  // eslint-disable-next-line no-underscore-dangle
+  query: { listId: props.fList._id }
+}));
+const { items: fTasks } = useFind({
+  model: Task,
+  params: listsParams
+});
+
+// Validation functions
+const requiredTaskName = computed(() => [(newTask.value.name === '' ? 'Cannot be empty' : true)]);
+
+const drop = (event, newListId) => {
+  // Get the "dropped" task
+  const { item: task } = useGet({
+    model: Task,
+    id: event.dataTransfer.getData('text')
+  });
+
+  // Update it
+  // task.value.listId = newListId;
+  // task.value.save();
+};
 </script>

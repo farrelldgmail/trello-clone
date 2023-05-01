@@ -11,7 +11,7 @@
         >
           <v-form>
             <v-icon large>
-              {{ mdiClipboardAccount }}
+              mdi-clipboard-account
             </v-icon>
             <v-text-field
               v-model="newUser.username"
@@ -34,49 +34,35 @@
     </v-container>
   </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
-import { mdiClipboardAccount } from '@mdi/js';
+<script setup>
+import { computed, ref } from 'vue';
 import { models } from 'feathers-vuex';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
+import { useRouter } from 'vue-router';
 
+// REM TODO DF Namespace not found?
 const { useActions } = createNamespacedHelpers('auth');
 
-export default defineComponent({
-  name: 'Login',
-  setup(props, context) {
-    // References to models
-    const { User } = models.api;
+const { User } = models.api;
 
-    // Variables
-    const newUser = ref(new User());
-    const { authenticate } = useActions(['authenticate']);
-    const router = context.root.$router;
+// Variables
+const newUser = ref(new User());
+const { authenticate } = useActions(['authenticate']);
+const router = useRouter();
 
-    // Validation functions
-    const isUserValid = computed(() => (newUser.value.email !== '' && newUser.value.password !== ''));
-    const requiredUsername = computed(() => [(newUser.value.username === '' ? 'Cannot be empty' : true)]);
-    const requiredPass = computed(() => [(newUser.value.password === '' ? 'Cannot be empty' : true)]);
+// Validation functions
+const isUserValid = computed(() => (newUser.value.email !== '' && newUser.value.password !== ''));
+const requiredUsername = computed(() => [(newUser.value.username === '' ? 'Cannot be empty' : true)]);
+const requiredPass = computed(() => [(newUser.value.password === '' ? 'Cannot be empty' : true)]);
 
-    // Other functions
-    const login = async () => {
-      await authenticate({
-        username: newUser.value.username,
-        password: newUser.value.password,
-        strategy: 'local'
-      });
+// Other functions
+const login = async () => {
+  await authenticate({
+    username: newUser.value.username,
+    password: newUser.value.password,
+    strategy: 'local'
+  });
 
-      await router.push('/board');
-    };
-
-    return {
-      mdiClipboardAccount,
-      newUser,
-      requiredUsername,
-      requiredPass,
-      isUserValid,
-      login
-    };
-  }
-});
+  await router.push('/board');
+};
 </script>

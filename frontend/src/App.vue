@@ -18,7 +18,7 @@
           left
           color="white"
         >
-          {{ mdiArrowLeft }}
+          mdi-arrow-left
         </v-icon>
       </v-btn>
       <v-app-bar-title class="px-3 white--text">
@@ -78,56 +78,38 @@
     </v-main>
   </v-app>
 </template>
-
-<script lang="ts">
-import { computed, defineComponent, ref } from '@vue/composition-api';
-import { mdiArrowLeft } from '@mdi/js';
+<script setup>
+import { computed, defineComponent, onErrorCaptured } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 import { createNamespacedHelpers } from 'vuex-composition-helpers';
 import errorMessage from '@/features/Error/components/errorMessage.vue';
 
+// REM TODO DF Namespaces not found! Y?
 const { useActions: useActionAuth } = createNamespacedHelpers('auth');
 const { useActions: useActionError } = createNamespacedHelpers('error');
+const { logout } = useActionAuth(['logout']);
+const { setError } = useActionError(['setError']);
 
-export default defineComponent({
-  name: 'App',
-  components: { errorMessage },
-  errorCaptured(error) {
-    // Send error in store (error module)
-    console.log('Error captured=', error);
-    const { message, name } = error;
-    this.setError({ message, name });
-    setTimeout(() => {
-      this.setError({ message: '', name: '' });
-    }, 3000);
-    return false;
-  },
-  // methods: {
-  //   // REM TODO DF
-  //   setError() {
-  //     console.log('call dispatch');
-  //     this.$store.dispatch('error/setError', { message: 'Message', name: 'Name' });
-  //     console.log('called dispatch');
-  //   }
-  // },
-  setup(props, context) {
-    const { logout } = useActionAuth(['logout']);
-    const router = context.root.$router;
-    const { setError } = useActionError(['setError']);
+const router = useRouter();
+const store = useStore();
 
-    const logoutRedirect = () => {
-      logout();
-      router.push('/');
-    };
+const logoutRedirect = () => {
+  logout();
+  router.push('/');
+};
 
-    const isAuthenticated = computed(() => (context.root.$store.state.auth.user !== null));
+const isAuthenticated = computed(() => (store.state.auth.user !== null));
 
-    return {
-      setError,
-      logoutRedirect,
-      isAuthenticated,
-      mdiArrowLeft
-    };
-  },
+onErrorCaptured((error) => {
+  // Send error in store (error module)
+  console.log('Error captured=', error);
+  const { message, name } = error;
+  this.setError({ message, name });
+  setTimeout(() => {
+    this.setError({ message: '', name: '' });
+  }, 3000);
+  return false;
 });
 </script>
 <style scoped>

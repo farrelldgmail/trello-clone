@@ -107,71 +107,52 @@
     <!-- Lists END -->
   </v-container>
 </template>
-
-<script lang="ts" >
-import { computed, ref, defineComponent } from '@vue/composition-api';
+<script setup>
+import { computed, ref, defineProps } from 'vue';
 import { useGet, useFind, models } from 'feathers-vuex';
-import list from '@/features/Board/components/List.vue';
 
-export default defineComponent({
-  name: 'Board',
-  components: { list },
-  props: {
-    boardId: {
-      type: String,
-      required: true
-    },
-  },
-  setup(props, context) {
-    // References to models
-    const { Board } = models.api;
-    const { List } = models.api;
-
-    // Variables
-    const newList = ref(new List({ boardId: props.boardId, color: '#e0e0e0' }));
-    const addListAction = ref(0);
-
-    // Data manipulation functions
-    const addList = () => { addListAction.value = 1; };
-    const createList = async () => {
-      await newList.value.create();
-      newList.value = new List({ boardId: props.boardId, color: '#e0e0e0' });
-      addListAction.value = 0;
-    };
-
-    // Data retrieval
-    // Get the board
-    const { item: board, isPending: isBoardGetPending } = useGet({
-      model: Board,
-      id: props.boardId
-    });
-    // Get the lists
-    const listsParams = computed(() => ({
-      query: { boardId: props.boardId }
-    }));
-    const { items: fLists } = useFind({
-      model: List,
-      params: listsParams
-    });
-
-    // Validation functions
-    const requiredListName = computed(() => [(newList.value.name === '' ? 'Cannot be empty' : true)]);
-    const requiredBoardName = computed(() => [(board.value.name === '' ? 'Cannot be empty' : true)]);
-
-    // 4. Return the data, named as you prefer
-    return {
-      newList,
-      addListAction,
-      addList,
-      createList,
-      board,
-      isBoardGetPending,
-      fLists,
-      requiredListName,
-      requiredBoardName
-    };
+// Props
+const props = defineProps({
+  boardId: {
+    type: String,
+    required: true
   },
 });
+
+// References to models
+const { Board } = models.api;
+const { List } = models.api;
+
+// Variables
+const newList = ref(new List({ boardId: props.boardId, color: '#e0e0e0' }));
+const addListAction = ref(0);
+
+// Data manipulation functions
+const addList = () => { addListAction.value = 1; };
+const createList = async () => {
+  await newList.value.create();
+  newList.value = new List({ boardId: props.boardId, color: '#e0e0e0' });
+  addListAction.value = 0;
+};
+
+// Data retrieval
+// Get the board
+const { item: board, isPending: isBoardGetPending } = useGet({
+  model: Board,
+  id: props.boardId
+});
+// Get the lists
+const listsParams = computed(() => ({
+  query: { boardId: props.boardId }
+}));
+const { items: fLists } = useFind({
+  model: List,
+  params: listsParams
+});
+
+// Validation functions
+const requiredListName = computed(() => [(newList.value.name === '' ? 'Cannot be empty' : true)]);
+const requiredBoardName = computed(() => [(board.value.name === '' ? 'Cannot be empty' : true)]);
 </script>
 <style scoped>
   .v-100 { height: 100%; }
